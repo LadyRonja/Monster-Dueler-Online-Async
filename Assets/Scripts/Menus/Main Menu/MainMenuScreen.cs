@@ -11,6 +11,7 @@ public class MainMenuScreen : MonoBehaviour
     public GameObject playScreen;
     public GameObject newGameScreen;
     public GameObject continueGameScreen;
+    public TMP_Text greetingText;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class MainMenuScreen : MonoBehaviour
 
     private void OnEnable()
     {
+        greetingText.text = $"Welcome {ActiveUser.CurrentActiveUser}!";
         SetScreenActive(mainMenuScreen);
     }
 
