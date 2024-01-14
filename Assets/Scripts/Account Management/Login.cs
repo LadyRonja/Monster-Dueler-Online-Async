@@ -1,5 +1,5 @@
 
-public class Login
+public static class Login
 {
     public static bool AttemptLogin(string username, string password, out string errorMessaged)
     {

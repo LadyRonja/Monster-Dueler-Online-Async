@@ -1,6 +1,6 @@
 
 
-public class ActiveUser
+public static class ActiveUser
 {
     private static User activeUser;
     public static User CurrentActiveUser { get => GetActiveUser(); private set => activeUser = value; }
