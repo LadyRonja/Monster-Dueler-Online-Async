@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LoginScreen : MonoBehaviour
 {
     public static LoginScreen Instance;
 
-    public TMP_InputField userInputField;
+    public TMP_InputField emailInputField;
     public TMP_InputField passwordInputField;
+    [Space]
+    public Button loginButton;
     [Space]
     public TMP_Text errorText;
 
@@ -24,16 +27,19 @@ public class LoginScreen : MonoBehaviour
         errorText.text = "";
     }
 
-    public void AttemptLogin()
+    public async void AttemptLogin()
     {
-        if(Login.AttemptLogin(userInputField.text, passwordInputField.text, out string errorMsg))
+        loginButton.interactable = false;
+        var loginResult = await Login.AttemptLogin(emailInputField.text, passwordInputField.text);
+        if (loginResult.success)
         {
             errorText.text = "";
             MainMenuData.Instance.SetScreenActive(MainMenuData.Instance.mainMenuScreen);
         }
         else
         {
-            errorText.text = errorMsg;
+            errorText.text = loginResult.errorMsg;
         }
+        loginButton.interactable = true;
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RegisterScreen : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class RegisterScreen : MonoBehaviour
     public TMP_InputField passwordFirstInputField;
     public TMP_InputField passwordSecondInputField;
     public TMP_InputField emailInputField;
+    [Space]
+    public Button registerButton;
     [Space]
     public TMP_Text errorText;
 
@@ -26,23 +29,29 @@ public class RegisterScreen : MonoBehaviour
         errorText.text = "";
     }
 
-    public void AttemptRegister()
+    public async void AttemptRegister()
     {
+        registerButton.interactable = false;
+
         RegisterData regData = new RegisterData(
                                         usernameInputField.text, 
                                         passwordFirstInputField.text, 
                                         passwordSecondInputField.text, 
                                         emailInputField.text);
 
-        if(Register.AttemptRegister(regData, out string errorMessage))
+        var registerResult = await Register.AttemptRegister(regData);
+
+        if(registerResult.sucess)
         {
             MainMenuData.Instance.SetScreenActive(MainMenuData.Instance.loginScreen);
-            LoginScreen.Instance.userInputField.text = regData.username;
+            LoginScreen.Instance.emailInputField.text = regData.email;
             LoginScreen.Instance.passwordInputField.text = regData.password;
         }
         else
         {
-            errorText.text = errorMessage;
+            errorText.text = registerResult.errorMsg;
         }
+
+        registerButton.interactable = true;
     }
 }

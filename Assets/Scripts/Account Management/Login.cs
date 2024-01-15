@@ -1,29 +1,54 @@
 
-public static class Login
-{
-    public static bool AttemptLogin(string username, string password, out string errorMessaged)
-    {
-        errorMessaged = "";
-        
-        if (username == "admin" && password == "admin")
-        {
-            LogIn(username, password);
-            return true;
-        }
+using Firebase.Auth;
+using Firebase.Extensions;
+using System.Data.Common;
+using System.Threading.Tasks;
 
-        errorMessaged = "Username or password not found";
-        return false;
+public struct LoginResult
+{
+    public LoginResult(bool success = false, string errorMsg = "")
+    {
+        this.success = success;
+        this.errorMsg = errorMsg;
     }
 
-    private static void LogIn(string username, string password)
+    public bool success;
+    public string errorMsg;
+}
+
+public static class Login
+{
+    // TODO: Refactor, currently returning before async call returns
+    public static async Task<LoginResult> AttemptLogin(string email, string password)
+    {
+        LoginResult result = new LoginResult();
+        await FirebaseInitializer.Auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
+        {
+            if (task.Exception != null)
+            {
+                result.errorMsg = task.Exception.Message;
+            }
+            else
+            {
+                FirebaseUser newUser = task.Result.User;
+                result.success = true;
+                LogIn();
+            }
+        });
+
+        return result;
+    }
+
+    private static void LogIn()
     {
         // TODO:
         // Get user data from database
 
         //temp
-        User signInAs = new User(username, "admin@admin.com", password);
+        User signInAs = new User(FirebaseInitializer.Auth.CurrentUser.UserId, "", ""); // TODO: This is fake
 
         ActiveUser.SetActiveUser(signInAs);
+        //MainMenuData.Instance.SetScreenActive(MainMenuData.Instance.mainMenuScreen);
     }
 
     public static void Logout()

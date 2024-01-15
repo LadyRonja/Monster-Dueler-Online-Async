@@ -1,14 +1,28 @@
-
-
+using Firebase.Auth;
+using Firebase.Extensions;
 using System.Linq;
+using System.Threading.Tasks;
+
+public struct RegResult
+{
+    RegResult(bool success = false, string errorMsg = "")
+    {
+        this.sucess = success;
+        this.errorMsg = errorMsg;
+    }
+
+    public bool sucess;
+    public string errorMsg;
+}
 
 public static class Register
 {
     public static string[] insecurePasswords = { "123456789", "987654321", "password", "password123", "admin", "drowssap", "abcdef", "abc123", "123abc" };
 
-    public static bool AttemptRegister(RegisterData newUserData, out string errorMsg)
+    // TODO: Refactor, currently using async but returns as sucess before that resolved
+    public static async Task<RegResult> AttemptRegister(RegisterData newUserData)
     {
-        errorMsg = "";
+        RegResult result = new RegResult();
 
         // TODO:
         // Check if username is vialbe
@@ -22,35 +36,42 @@ public static class Register
             || newUserData.passwordRepeat == ""
             || newUserData.email == "")
         {
-            errorMsg = "Please awnser all fields";
-            return false;
+            result.errorMsg = "Please awnser all fields";
+            return result;
         }
 
         if(newUserData.password != newUserData.passwordRepeat)
         {
-            errorMsg = "Passwords do not match";
-            return false;
+            result.errorMsg = "Passwords do not match";
+            return result;
         }
 
         if (newUserData.password.ToCharArray().Length < 5)
         {
-            errorMsg = "Insecure Password";
-            return false;
+            result.errorMsg = "Insecure Password";
+            return result;
         }
 
         if (insecurePasswords.Contains(newUserData.password))
         {
-            errorMsg = "Insecure Password";
-            return false;
+            result.errorMsg = "Insecure Password";
+            return result;
         }
 
-        RegisterNewUser(newUserData);
-        return true;
-    }
-
-    private static void RegisterNewUser(RegisterData newUserData)
-    {
-        // Upload new user to database here
+        await FirebaseInitializer.Auth.CreateUserWithEmailAndPasswordAsync(newUserData.email, newUserData.password).ContinueWithOnMainThread(task =>
+        {
+            if (task.Exception != null)
+            {
+                result.errorMsg = task.Exception.ToString();
+                result.sucess = false;
+            }
+            else
+            {
+                FirebaseUser newUser = task.Result.User;
+                result.sucess = true;
+            }
+        });
+        return result;
     }
 }
 
