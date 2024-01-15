@@ -70,3 +70,13 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Hard entered by user
+/Assets/StreamingAssets/google-services.json
+/Assets/StreamingAssets/google-services.json.meta
+/[Aa]ssets/[Ss]treamingAssets/StreamingAssets/google-services-desktop.json
+/[Aa]ssets/[Ss]treamingAssets/StreamingAssets/google-services-desktop.json.meta
+/[Aa]ssets/Firebase/Plugins/x86_64/FirebaseCppApp-11_6_0.bundle
+/[Aa]ssets/Firebase/Plugins/x86_64/FirebaseCppApp-11_6_0.bundle.meta
+Assets/StreamingAssets/google-services-desktop.json
+Assets/StreamingAssets/google-services-desktop.json.meta
