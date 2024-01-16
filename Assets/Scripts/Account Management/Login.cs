@@ -3,6 +3,7 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using System.Data.Common;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public struct LoginResult
 {
@@ -18,7 +19,6 @@ public struct LoginResult
 
 public static class Login
 {
-    // TODO: Refactor, currently returning before async call returns
     public static async Task<LoginResult> AttemptLogin(string email, string password)
     {
         LoginResult result = new LoginResult();
@@ -32,27 +32,26 @@ public static class Login
             {
                 FirebaseUser newUser = task.Result.User;
                 result.success = true;
-                LogIn();
             }
         });
+
+        if (result.success)
+            await LogIn();
 
         return result;
     }
 
-    private static void LogIn()
+    private static async Task LogIn()
     {
-        // TODO:
-        // Get user data from database
+        string loadedUserJson = await FirebaseLoader.LoadFromDatabase("users", FirebaseInitializer.Auth.CurrentUser.UserId);
+        User loadedUser = JsonUtility.FromJson<User>(loadedUserJson);
 
-        //temp
-        User signInAs = new User(FirebaseInitializer.Auth.CurrentUser.UserId, "", ""); // TODO: This is fake
-
-        ActiveUser.SetActiveUser(signInAs);
-        //MainMenuData.Instance.SetScreenActive(MainMenuData.Instance.mainMenuScreen);
+        ActiveUser.SetActiveUser(loadedUser);
     }
 
     public static void Logout()
     {
+        FirebaseInitializer.Auth.SignOut();
         ActiveUser.SetActiveUser(null);
     }
 }

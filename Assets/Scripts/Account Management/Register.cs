@@ -1,7 +1,10 @@
 using Firebase.Auth;
 using Firebase.Extensions;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public struct RegResult
 {
@@ -28,8 +31,6 @@ public static class Register
         // Check if username is vialbe
         // Check if username already in the database
         // Check if password is secure, properly
-        // Check if email is viable
-        // Check if email is already in use
 
         if (newUserData.username == ""
             || newUserData.password == ""
@@ -46,15 +47,21 @@ public static class Register
             return result;
         }
 
-        if (newUserData.password.ToCharArray().Length < 5)
+        if (insecurePasswords.Contains(newUserData.password))
         {
             result.errorMsg = "Insecure Password";
             return result;
         }
 
-        if (insecurePasswords.Contains(newUserData.password))
+        if(newUserData.username.ToCharArray().Length < 4)
         {
-            result.errorMsg = "Insecure Password";
+            result.errorMsg = "Username too short";
+            return result;
+        }
+
+        if (newUserData.username.Contains('!'))
+        {
+            result.errorMsg = "Username contains disallowed symbols";
             return result;
         }
 
@@ -67,8 +74,14 @@ public static class Register
             }
             else
             {
-                FirebaseUser newUser = task.Result.User;
+                FirebaseUser newAuthUser = task.Result.User;
                 result.sucess = true;
+
+                string uniqueUsername = newUserData.username/* + "!" + Guid.NewGuid().ToString()*/;
+
+                User newUser = new User(newUserData.email, uniqueUsername);
+                string userJson = JsonUtility.ToJson(newUser);
+                FirebaseSaver.SaveToDatabase("users", newAuthUser.UserId, userJson);
             }
         });
         return result;

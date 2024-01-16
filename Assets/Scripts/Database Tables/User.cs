@@ -1,16 +1,17 @@
-
+using System.Collections.Generic;
 
 public class User
 {
-    string username; 
-    string email; // Primary Key
-    string password; // TODO: Currently stored in plain text
-    bool admin = false;
+    public string email; // ID
+    public string username;
+    public List<Game> activeGames = new();
+    public List<GameData> myGameData = new();
 
-    public User(string username, string email, string password)
+    public User(string email, string username)
     {
-        this.username = username;
         this.email = email;
-        this.password = password;
+        this.username = username;
+        this.activeGames = new();
+        this.myGameData = new();
     }
 }

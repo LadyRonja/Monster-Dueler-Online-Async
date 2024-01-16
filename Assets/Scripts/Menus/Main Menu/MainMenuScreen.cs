@@ -23,7 +23,7 @@ public class MainMenuScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        greetingText.text = $"Welcome {ActiveUser.CurrentActiveUser}!";
+        greetingText.text = $"Welcome {ActiveUser.CurrentActiveUser.username}!";
         SetScreenActive(mainMenuScreen);
     }
 

@@ -5,12 +5,11 @@ using System.Threading.Tasks;
 
 public class FirebaseLoader
 {
-   private async Task<string> LoadFromDatabase()
+   public static async Task<string> LoadFromDatabase(string loadFromTable, string loadFromPath)
    {
         string output = "";
         var db = FirebaseDatabase.DefaultInstance;
-        var userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
-        await db.RootReference.Child("users").Child(userId).GetValueAsync().ContinueWithOnMainThread(task =>
+        await db.RootReference.Child(loadFromTable).Child(loadFromPath).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.Exception != null)
             {
@@ -25,4 +24,24 @@ public class FirebaseLoader
         });
         return output;
    }
+
+    public static async Task<string> LoadTable(string tableName)
+    {
+        string output = "";
+        var db = FirebaseDatabase.DefaultInstance;
+        await db.RootReference.Child(tableName).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.Exception != null)
+            {
+                //Debug.LogError(task.Exception);
+            }
+
+            //here we get the result from our database.
+            DataSnapshot snap = task.Result;
+
+            //And send the JSON data to a function that can update our game.
+            output = snap.GetRawJsonValue();
+        });
+        return output;
+    }
 }
