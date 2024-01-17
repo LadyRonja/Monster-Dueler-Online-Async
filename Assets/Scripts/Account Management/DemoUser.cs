@@ -68,11 +68,11 @@ public class DemoUser : MonoBehaviour
         if (auth.CurrentUser != null && auth.CurrentUser.Email != email)
             auth.SignOut();
         else if (auth.CurrentUser != null)
-            LoadNextScene(); //Already signed in, we can load next scene
+            LoadNextScene(email); //Already signed in, we can load next scene
 
         LoginResult logRes = await Login.AttemptLogin(email, password);
         if (logRes.success)
-            LoadNextScene();
+            LoadNextScene(email);
         else
         {
             LoginScreen.Instance.errorText.text = logRes.errorMsg;
@@ -81,8 +81,9 @@ public class DemoUser : MonoBehaviour
         }
     }
 
-    private void LoadNextScene()
+    private void LoadNextScene(string devMail)
     {
         MainMenuData.Instance.SetScreenActive(MainMenuData.Instance.mainMenuScreen);
+        MainMenuScreen.Instance.greetingText.text = $"Logged in as dev {devMail}";
     }
 }

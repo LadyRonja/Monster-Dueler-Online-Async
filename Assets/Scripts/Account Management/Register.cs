@@ -142,7 +142,7 @@ public static class Register
         });
 
         if(result.sucess)
-           await Login.AttemptLogin(newUserData.email, newUserData.password);
+           await Login.AttemptLogin(newUserData.email, newUserData.password, true);
 
         return result;
     }

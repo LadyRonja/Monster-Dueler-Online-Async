@@ -20,7 +20,7 @@ public struct LoginResult
 
 public static class Login
 {
-    public static async Task<LoginResult> AttemptLogin(string email, string password)
+    public static async Task<LoginResult> AttemptLogin(string email, string password, bool firstLogin = false)
     {
         LoginResult result = new LoginResult();
         await FirebaseInitializer.Auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
@@ -36,17 +36,19 @@ public static class Login
             }
         });
 
-        if (result.success)
-            await LogIn();
+        if (result.success && firstLogin)
+            await LogIn(true);
 
         return result;
     }
 
-    private static async Task LogIn()
+    private static async Task LogIn(bool firstLogin = false)
     {
         string loadedUserJson = await FirebaseLoader.LoadFromDatabase("users", FirebaseInitializer.Auth.CurrentUser.UserId);
         User loadedUser = JsonUtility.FromJson<User>(loadedUserJson);
-        FirebaseSaver.SaveValueToDatabase("userNames", Guid.NewGuid().ToString(), loadedUser.username);
+
+        if(firstLogin)
+            FirebaseSaver.SaveValueToDatabase("userNames", Guid.NewGuid().ToString(), loadedUser.username);
 
         ActiveUser.SetActiveUser(loadedUser);
     }
