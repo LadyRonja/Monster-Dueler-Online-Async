@@ -16,7 +16,7 @@ public class NewGameScreen : MonoBehaviour
     public async Task AttemptToCreateNewGame()
     {
         Debug.Log("starting");
-        string userJsonList = await FirebaseLoader.LoadTable("users");
-        Debug.Log(userJsonList);
+        //string userJsonList = await FirebaseLoader.LoadTable("users");
+        //Debug.Log(userJsonList);
     }
 }

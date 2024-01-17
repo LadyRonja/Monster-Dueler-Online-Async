@@ -1,6 +1,7 @@
 
 using Firebase.Auth;
 using Firebase.Extensions;
+using System;
 using System.Data.Common;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -45,6 +46,7 @@ public static class Login
     {
         string loadedUserJson = await FirebaseLoader.LoadFromDatabase("users", FirebaseInitializer.Auth.CurrentUser.UserId);
         User loadedUser = JsonUtility.FromJson<User>(loadedUserJson);
+        FirebaseSaver.SaveValueToDatabase("userNames", Guid.NewGuid().ToString(), loadedUser.username);
 
         ActiveUser.SetActiveUser(loadedUser);
     }

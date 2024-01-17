@@ -1,10 +1,12 @@
 using Firebase.Auth;
+using Firebase.Database;
 using Firebase.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public struct RegResult
 {
@@ -22,7 +24,6 @@ public static class Register
 {
     public static string[] insecurePasswords = { "123456789", "987654321", "password", "password123", "admin", "drowssap", "abcdef", "abc123", "123abc" };
 
-    // TODO: Refactor, currently using async but returns as sucess before that resolved
     public static async Task<RegResult> AttemptRegister(RegisterData newUserData)
     {
         RegResult result = new RegResult();
@@ -32,6 +33,7 @@ public static class Register
         // Check if username already in the database
         // Check if password is secure, properly
 
+        // Check all fields being filled
         if (newUserData.username == ""
             || newUserData.password == ""
             || newUserData.passwordRepeat == ""
@@ -41,6 +43,7 @@ public static class Register
             return result;
         }
 
+        // Check if the password entries match
         if(newUserData.password != newUserData.passwordRepeat)
         {
             result.errorMsg = "Passwords do not match";
@@ -53,18 +56,71 @@ public static class Register
             return result;
         }
 
+        // Check if the username length is ok
         if(newUserData.username.ToCharArray().Length < 4)
         {
             result.errorMsg = "Username too short";
             return result;
         }
 
-        if (newUserData.username.Contains('!'))
+        if (newUserData.username.ToCharArray().Length > 14)
+        {
+            result.errorMsg = "Username too long";
+            return result;
+        }
+
+        // Check for disallowed symbols
+        if (   newUserData.username.Contains('!')
+            || newUserData.username.Contains(',')
+            || newUserData.username.Contains(':')
+            || newUserData.username.Contains('{')
+            || newUserData.username.Contains('}')
+            || newUserData.username.Contains('"')
+            || newUserData.username.Contains('?')
+            || newUserData.username.Contains('<')
+            || newUserData.username.Contains('>')
+            || newUserData.username.Contains('/')
+            || newUserData.username.Contains('|')
+            )
         {
             result.errorMsg = "Username contains disallowed symbols";
             return result;
         }
 
+        // Check if the username is available
+        string jsonBlorb = await FirebaseLoader.LoadTable("userNames");
+        if (jsonBlorb != null)
+        {
+            char[] parms = { ',', ':', '{', '}', '"' };
+            List<string> existingUserNames = jsonBlorb.Split(parms, StringSplitOptions.RemoveEmptyEntries).ToList();
+            if (existingUserNames.Contains(newUserData.username.Trim()))
+            {
+                result.errorMsg = "Username not available";
+                return result;
+            }
+        }
+        #region frunctional alternative
+        /*var db = FirebaseDatabase.DefaultInstance;
+        await db.GetReference("userNames").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.Exception != null)
+            {
+                //Debug.LogError(task.Exception);
+            }
+
+            //here we get the result from our database.
+            DataSnapshot snap = task.Result;
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            foreach (var item in snap.Children)
+            {
+                result.Add(item.Key, item.Value.ToString());
+                Debug.Log(item.Key + ": + " + item.Value.ToString());
+            }
+            //And send the JSON data to a function that can update our game.
+        });*/
+        #endregion
+
+        // Attempt to create the account
         await FirebaseInitializer.Auth.CreateUserWithEmailAndPasswordAsync(newUserData.email, newUserData.password).ContinueWithOnMainThread(task =>
         {
             if (task.Exception != null)
@@ -84,6 +140,10 @@ public static class Register
                 FirebaseSaver.SaveToDatabase("users", newAuthUser.UserId, userJson);
             }
         });
+
+        if(result.sucess)
+           await Login.AttemptLogin(newUserData.email, newUserData.password);
+
         return result;
     }
 }
