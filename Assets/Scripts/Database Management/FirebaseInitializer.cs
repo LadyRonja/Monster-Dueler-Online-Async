@@ -10,12 +10,12 @@ public class FirebaseInitializer : MonoBehaviour
 {
     private static FirebaseInitializer instance;
 
-    private FirebaseAuth auth;
-    private FirebaseDatabase db;
+    private FirebaseAuth _auth;
+    private FirebaseDatabase _db;
 
     public static FirebaseInitializer Instance { get => _GetInstance(); private set => instance = value; }
-    public static FirebaseAuth Auth { get => _GetAuth(); private set => Instance.auth = value; }
-    public static FirebaseDatabase Db { get => _GetDB(); private set => Instance.db = value; }
+    public static FirebaseAuth auth { get => _GetAuth(); private set => Instance._auth = value; }
+    public static FirebaseDatabase db { get => _GetDB(); private set => Instance._db = value; }
 
     void Awake()
     {
@@ -29,8 +29,8 @@ public class FirebaseInitializer : MonoBehaviour
             if (task.Exception != null)
                 Debug.LogError(task.Exception);
 
-            Instance.auth = FirebaseAuth.DefaultInstance;
-            Instance.db = FirebaseDatabase.DefaultInstance;
+            Instance._auth = FirebaseAuth.DefaultInstance;
+            Instance._db = FirebaseDatabase.DefaultInstance;
 
             FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
         });
@@ -47,11 +47,11 @@ public class FirebaseInitializer : MonoBehaviour
 
     private static FirebaseAuth _GetAuth()
     {
-        return Instance.auth;
+        return Instance._auth;
     }
 
     private static FirebaseDatabase _GetDB()
     {
-        return Instance.db;
+        return Instance._db;
     }
 }

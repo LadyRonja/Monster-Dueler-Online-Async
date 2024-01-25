@@ -6,8 +6,8 @@ public class FirebaseSaver
 {
     public static async void SaveToDatabase(string saveToTable, string saveToPath, string jsonString)
     {
-        var db = FirebaseInitializer.Db;
-        if (FirebaseInitializer.Auth.CurrentUser == null)
+        var db = FirebaseInitializer.db;
+        if (FirebaseInitializer.auth.CurrentUser == null)
             return;
 
         //puts the JSON data in the "saveToTable/saveToPath" part of the database.
@@ -16,8 +16,8 @@ public class FirebaseSaver
 
     public static async void SaveValueToDatabase(string saveToTable, string saveToPath, string value)
     {
-        var db = FirebaseInitializer.Db;
-        if (FirebaseInitializer.Auth.CurrentUser == null)
+        var db = FirebaseInitializer.db;
+        if (FirebaseInitializer.auth.CurrentUser == null)
             return;
 
         //puts the JSON data in the "saveToTable/saveToPath" part of the database.

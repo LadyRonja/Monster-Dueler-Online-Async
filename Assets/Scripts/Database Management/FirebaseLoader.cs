@@ -10,12 +10,12 @@ public class FirebaseLoader
    public static async Task<string> LoadFromDatabase(string loadFromTable, string loadFromPath)
    {
         string output = "";
-        var db = FirebaseDatabase.DefaultInstance;
+        var db = FirebaseInitializer.db;
         await db.RootReference.Child(loadFromTable).Child(loadFromPath).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.Exception != null)
             {
-               //Debug.LogError(task.Exception);
+               Debug.LogError(task.Exception);
             }
 
             //here we get the result from our database.
@@ -27,16 +27,36 @@ public class FirebaseLoader
         return output;
    }
 
+    public static async Task<string> LoadByValue(string loadFromTable, string basedOnValue, string value)
+    {
+        string output = "";
+        var db = FirebaseInitializer.db;
+        await db.RootReference.Child(loadFromTable).OrderByChild(basedOnValue).EqualTo(value).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.Exception != null)
+            {
+                Debug.LogError(task.Exception);
+            }
+
+            //here we get the result from our database.
+            DataSnapshot snap = task.Result;
+
+            //And send the JSON data to a function that can update our game.
+            output = snap.GetRawJsonValue();
+        });
+        return output;
+    }
+
     public static async Task<string> LoadTable(string tableName)
     {
         string output = "";
 
-        var db = FirebaseDatabase.DefaultInstance;
+        var db = FirebaseInitializer.db;
         await db.GetReference(tableName).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.Exception != null)
             {
-                //Debug.LogError(task.Exception);
+                Debug.LogError(task.Exception);
             }
             //here we get the result from our database.
             DataSnapshot snap = task.Result;

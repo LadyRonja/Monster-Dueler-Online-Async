@@ -23,7 +23,7 @@ public static class Login
     public static async Task<LoginResult> AttemptLogin(string email, string password, bool firstLogin = false)
     {
         LoginResult result = new LoginResult();
-        await FirebaseInitializer.Auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
+        await FirebaseInitializer.auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task =>
         {
             if (task.Exception != null)
             {
@@ -44,18 +44,18 @@ public static class Login
 
     private static async Task LogIn(bool firstLogin = false)
     {
-        string loadedUserJson = await FirebaseLoader.LoadFromDatabase("users", FirebaseInitializer.Auth.CurrentUser.UserId);
+        string loadedUserJson = await FirebaseLoader.LoadFromDatabase(DBPaths.USER_TABLE, FirebaseInitializer.auth.CurrentUser.UserId);
         User loadedUser = JsonUtility.FromJson<User>(loadedUserJson);
 
         if(firstLogin)
-            FirebaseSaver.SaveValueToDatabase("userNames", Guid.NewGuid().ToString(), loadedUser.username);
+            FirebaseSaver.SaveValueToDatabase(DBPaths.USERNAMES_TABLE, Guid.NewGuid().ToString(), loadedUser.username);
 
         ActiveUser.SetActiveUser(loadedUser);
     }
 
     public static void Logout()
     {
-        FirebaseInitializer.Auth.SignOut();
+        FirebaseInitializer.auth.SignOut();
         ActiveUser.SetActiveUser(null);
     }
 }

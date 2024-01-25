@@ -88,7 +88,7 @@ public static class Register
         }
 
         // Check if the username is available
-        string jsonBlorb = await FirebaseLoader.LoadTable("userNames");
+        string jsonBlorb = await FirebaseLoader.LoadTable(DBPaths.USERNAMES_TABLE);
         if (jsonBlorb != null)
         {
             char[] parms = { ',', ':', '{', '}', '"' };
@@ -121,7 +121,7 @@ public static class Register
         #endregion
 
         // Attempt to create the account
-        await FirebaseInitializer.Auth.CreateUserWithEmailAndPasswordAsync(newUserData.email, newUserData.password).ContinueWithOnMainThread(task =>
+        await FirebaseInitializer.auth.CreateUserWithEmailAndPasswordAsync(newUserData.email, newUserData.password).ContinueWithOnMainThread(task =>
         {
             if (task.Exception != null)
             {
@@ -137,7 +137,7 @@ public static class Register
 
                 User newUser = new User(newUserData.email, uniqueUsername);
                 string userJson = JsonUtility.ToJson(newUser);
-                FirebaseSaver.SaveToDatabase("users", newAuthUser.UserId, userJson);
+                FirebaseSaver.SaveToDatabase(DBPaths.USER_TABLE, newAuthUser.UserId, userJson);
             }
         });
 
