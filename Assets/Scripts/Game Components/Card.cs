@@ -1,5 +1,3 @@
-
-
-public class Card { 
-
+public class Card {
+    public short id;
 }
