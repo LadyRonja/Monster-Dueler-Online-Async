@@ -18,24 +18,26 @@ public class NewGameScreen : MonoBehaviour
     {
         Debug.Log("starting, searching for user: " + otherUserInputField.text);
 
-        if(otherUserInputField.text == ActiveUser.CurrentActiveUser.username)
+        if(otherUserInputField.text == ActiveUser.CurrentActiveUser.username || otherUserInputField.text == string.Empty)
         {
             // TODO: Tell the user they cant play vs themselves
             Debug.Log("You can not play the game vs yourself");
             return;
         }
 
-        string userBlob = await FirebaseLoader.LoadByValue(DBPaths.USER_TABLE, "username", otherUserInputField.text);
-        User otherPlayer = JsonUtility.FromJson<User>(userBlob);
+        User otherPlayer = await FirebaseLoader.GetUserFromUserNamer(otherUserInputField.text);
 
-        if (string.IsNullOrEmpty(userBlob) || otherPlayer == null)
+        if (otherPlayer == null)
         {
             // TODO: Display error to user
             Debug.Log("No user with that username was found");
             return;
         }
 
-        List<User> players = new() {ActiveUser.CurrentActiveUser, otherPlayer};
+        List<User> players = new() {
+            ActiveUser.CurrentActiveUser,
+            otherPlayer};
+
         List<Monster> monsters = new() {
             new Monster(10, Element.Fire, Position.Front),
             new Monster(15, Element.Water, Position.BackLeft),
@@ -46,12 +48,14 @@ public class NewGameScreen : MonoBehaviour
         List<Card> deck = new() {
             new Card(),
             new Card()};
+
         deck[0].id = 0;
         deck[1].id = 1;
 
         List<Card> hand = new() {
             new Card(),
             new Card()};
+
         deck[0].id = 2;
         deck[1].id = 3;
 
@@ -75,11 +79,8 @@ public class NewGameScreen : MonoBehaviour
 
         string jsonGameBlob = JsonUtility.ToJson(newGame);
 
-        Debug.Log(newGame.gameDatas.Count);
-        Debug.Log(jsonGameBlob);
-
         FirebaseSaver.SaveToDatabase(DBPaths.GAMES_TABLE, newGame.gameID, jsonGameBlob);
 
-        Debug.Log("Game Created?");
+        SceneHandler.LoadGame(newGame.gameID);
     }
 }

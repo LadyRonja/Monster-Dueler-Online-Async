@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+[Serializable]
 public class Game
 {
     public string gameID = Guid.NewGuid().ToString();

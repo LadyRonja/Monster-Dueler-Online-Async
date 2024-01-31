@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 
+[Serializable]
 public class User
 {
-    public string email; // ID
+    public string email;
     public string username;
     public List<Game> activeGames = new();
     public List<GameData> myGameData = new();

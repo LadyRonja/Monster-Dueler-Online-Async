@@ -1,6 +1,7 @@
 using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
+using System.Collections;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -85,5 +86,14 @@ public class DemoUser : MonoBehaviour
     {
         MainMenuData.Instance.SetScreenActive(MainMenuData.Instance.mainMenuScreen);
         MainMenuScreen.Instance.greetingText.text = $"Logged in as dev {devMail}";
+
+        Invoke("UpdateAcitveUser", 1);
+    }
+
+    private async void UpdateAcitveUser()
+    {
+        string userblob = await FirebaseLoader.LoadFromDatabase(DBPaths.USER_TABLE, FirebaseInitializer.auth.CurrentUser.UserId);
+        ActiveUser.SetActiveUser(JsonUtility.FromJson<User>(userblob));
+        MainMenuScreen.Instance.greetingText.text = $"Logged in as dev {ActiveUser.CurrentActiveUser.username}";
     }
 }

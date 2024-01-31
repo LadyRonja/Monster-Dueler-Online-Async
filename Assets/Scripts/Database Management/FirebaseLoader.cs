@@ -1,6 +1,7 @@
 using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
+using Google.MiniJSON;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -43,6 +44,31 @@ public class FirebaseLoader
 
             //And send the JSON data to a function that can update our game.
             output = snap.GetRawJsonValue();
+        });
+        return output;
+    }
+
+    public static async Task<User> GetUserFromUserNamer(string userName)
+    {
+        User output = null;
+        var db = FirebaseInitializer.db;
+        await db.RootReference.Child(DBPaths.USER_TABLE).OrderByChild("username").EqualTo(userName).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.Exception != null)
+            {
+                Debug.LogError(task.Exception);
+            }
+            //here we get the result from our database.
+            DataSnapshot snap = task.Result;
+
+            if (snap.ChildrenCount > 0)
+            {
+                foreach (var item in snap.Children)
+                {
+                    string json = item.GetRawJsonValue();
+                    output = JsonUtility.FromJson<User>(json);
+                }
+            }
         });
         return output;
     }

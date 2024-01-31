@@ -1,6 +1,9 @@
 
+using System;
+
 public enum Element { Fire, Water, Grass}
 public enum Position { Front, BackRight, BackLeft}
+[Serializable]
 public class Monster {
 
     // Stats
