@@ -8,6 +8,8 @@ public class GameDataRepresentor : MonoBehaviour
 {
     public TMP_Text usernameText;
     public Transform handContainer;
-    public Transform monsterContrainer;
-
+    public Transform monsterContainerFront;
+    public Transform monsterContainerBackRight;
+    public Transform monsterContainerBackLeft;
+    public Transform discardContainer;
 }

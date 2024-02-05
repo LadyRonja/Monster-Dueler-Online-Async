@@ -9,8 +9,8 @@ public class Game
     public int openSlots = 2;
     public bool gameIsOver = false;
 
-    public List<User> players = new();
-    public List<GameData> gameDatas= new();
+    public List<User> players;
+    public List<GameData> gameDatas;
 
     public Game(int openSlots, List<User> players, List<GameData> gameDatas) 
     { 

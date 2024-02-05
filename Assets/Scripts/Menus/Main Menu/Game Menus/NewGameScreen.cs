@@ -64,16 +64,21 @@ public class NewGameScreen : MonoBehaviour
         gameData1.hand = hand;
         gameData1.monsters = monsters;
 
-        GameData gameData2 = gameData1;
+        GameData gameData2 = new GameData();
+        gameData2.deck = deck;
+        gameData2.hand = hand;
+        gameData2.monsters = monsters;
+
+
+        gameData1.dataOwner = ActiveUser.CurrentActiveUser.username;
+        gameData2.dataOwner = otherPlayer.username;
 
         List<GameData> gameDatas = new() { gameData1, gameData2 };
 
         Game newGame = new Game(0, players, gameDatas);
-        newGame.gameDatas[0].dataOwner = ActiveUser.CurrentActiveUser.username;
         newGame.gameDatas[0].forGame = newGame.gameID;
         newGame.gameDatas[0].dataID = newGame.gameDatas[0].dataOwner + "_" + newGame.gameDatas[0].forGame;
 
-        newGame.gameDatas[1].dataOwner = otherPlayer.username;
         newGame.gameDatas[1].forGame = newGame.gameID;
         newGame.gameDatas[1].dataID = newGame.gameDatas[1].dataOwner + "_" + newGame.gameDatas[1].forGame;
 
