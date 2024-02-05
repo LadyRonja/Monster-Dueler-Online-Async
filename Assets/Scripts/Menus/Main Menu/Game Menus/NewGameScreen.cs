@@ -56,8 +56,8 @@ public class NewGameScreen : MonoBehaviour
             new Card(),
             new Card()};
 
-        deck[0].id = 2;
-        deck[1].id = 3;
+        hand[0].id = 2;
+        hand[1].id = 3;
 
         GameData gameData1 = new GameData();
         gameData1.deck = deck;

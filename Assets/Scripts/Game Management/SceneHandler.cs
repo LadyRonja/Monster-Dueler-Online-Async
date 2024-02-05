@@ -9,7 +9,7 @@ public class SceneHandler
     {
         GameLoader.gameIDToLoad = gameID;
 
-        LoadSceneMode("gameScene");
+        LoadSceneMode("GameScene");
     }
 
     public static void LoadSceneMode(string sceneName)

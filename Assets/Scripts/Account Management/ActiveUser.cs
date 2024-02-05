@@ -1,5 +1,7 @@
 
 
+using System.Threading.Tasks;
+
 public static class ActiveUser
 {
     private static User activeUser;
@@ -13,6 +15,7 @@ public static class ActiveUser
     private static User GetActiveUser()
     {
         if(activeUser == null) {
+
             return new User("Guest", "guest@guest.com");
         }
 
