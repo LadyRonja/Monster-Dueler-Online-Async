@@ -10,12 +10,12 @@ public class GameData
     public string forGame; // composite key
 
     public List<Monster> monsters = new();
-    public List<Card> hand = new();
-    public List<Card> deck = new();
-    public List<Card> discard = new();
+    public List<CardKey> hand = new();
+    public List<CardKey> deck = new();
+    public List<CardKey> discard = new();
 
     public List<int> diceResults = new();
     public int movesPlayed = 0;
-    public Card playedCard;
-    public Card discardedCard;
+    public CardKey playedCard;
+    public CardKey discardedCard;
 }

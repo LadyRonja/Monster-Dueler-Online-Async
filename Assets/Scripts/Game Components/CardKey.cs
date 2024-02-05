@@ -1,6 +1,6 @@
 using System;
 
 [Serializable]
-public class Card {
+public class CardKey {
     public short id;
 }

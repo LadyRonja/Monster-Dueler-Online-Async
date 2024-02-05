@@ -45,16 +45,16 @@ public class NewGameScreen : MonoBehaviour
         };
 
         // TODO: Shuffle deck and deal hand
-        List<Card> deck = new() {
-            new Card(),
-            new Card()};
+        List<CardKey> deck = new() {
+            new CardKey(),
+            new CardKey()};
 
         deck[0].id = 0;
         deck[1].id = 1;
 
-        List<Card> hand = new() {
-            new Card(),
-            new Card()};
+        List<CardKey> hand = new() {
+            new CardKey(),
+            new CardKey()};
 
         hand[0].id = 2;
         hand[1].id = 3;
