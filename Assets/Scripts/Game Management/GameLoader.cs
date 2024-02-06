@@ -1,3 +1,4 @@
+using AYellowpaper.SerializedCollections;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Loading;
@@ -15,6 +16,9 @@ public class GameLoader : MonoBehaviour
     public GameDataRepresentor opponentRepresentor;
 
     public GameObject monsterDisplayPrefab;
+
+    [SerializedDictionary("ID, Card")]
+    public SerializedDictionary<short, Card> cardDictionary;
 
     private void Awake()
     {
