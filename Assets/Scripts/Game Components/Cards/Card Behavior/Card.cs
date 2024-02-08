@@ -6,6 +6,7 @@ using UnityEngine;
 public class Card : MonoBehaviour
 {
     public string cardName;
+    [TextArea(3, 5)]
     public string description;
     public int power;
     public int initiative;

@@ -14,7 +14,10 @@ public class Monster {
     public Element myElement;
     public Position myPosition;
     public bool alive;
+
+    // State
     public bool justSwitchedIn;
+    public int immuneForTurns = 0;
 
     // Counters
     public int damageCounters;
@@ -42,6 +45,7 @@ public class Monster {
         //STAB = 1
 
         float output = 0;
+
         int sameTypeAttackBonus = (damageType == damageDealer.myElement) ? 2 : 1;
         float typeMultiplier = CalculateTypeMultiplier(damageType, damageReciever.myElement, damageReciever.justSwitchedIn);
 
@@ -120,6 +124,7 @@ public class Monster {
     public void TakeDamage(int damageAmount, Element damageType, Monster damageDealer, Monster damageReciever)
     {
         if(!alive) return;
+        if (immuneForTurns > 0) return;
 
         int damageToTake = CalculateDamage(damageAmount, damageType, damageDealer, damageReciever);
 

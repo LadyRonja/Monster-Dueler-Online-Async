@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &2333204132493357208
+--- !u!1001 &7451530417020662626
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,31 +10,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: power
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
-      propertyPath: myType
-      value: 1
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: cardName
-      value: Tidal Wave
+      value: Healing Meditation
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: background
       value: 
-      objectReference: {fileID: 21300000, guid: 2ca4bb4477971de4ab07cb7295745c12, type: 3}
+      objectReference: {fileID: 21300000, guid: 35cbdaeae707c9b48a8adc42995cb147, type: 3}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: initiative
-      value: 6
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: description
-      value: Rotates your team Counter Clockwise
-      objectReference: {fileID: 0}
-    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
-      propertyPath: discardable
-      value: 1
+      value: Heals user for 5 HP
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: illustration
@@ -42,27 +34,15 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 0cc43c3364c429541822dbca32b51f4c, type: 3}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: behaivors.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: behaivors.Array.data[0]
       value: 
-      objectReference: {fileID: 3898398306468829114}
-    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
-      propertyPath: behaivors.Array.data[1]
-      value: 
-      objectReference: {fileID: 3771370499513855633}
-    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
-      propertyPath: behaivors.Array.data[2]
-      value: 
-      objectReference: {fileID: 8374680075327097906, guid: 5363475ea942c58418ce2d13f11f675d, type: 3}
-    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
-      propertyPath: behaivors.Array.data[3]
-      value: 
-      objectReference: {fileID: -4538799922893951146, guid: a89b7baa7c9855f41af93654f2a5e564, type: 3}
+      objectReference: {fileID: -8580873477472866897}
     - target: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: m_Name
-      value: w_tidalWave
+      value: s_healingMeditation
       objectReference: {fileID: 0}
     - target: {fileID: 9153766418903248155, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: m_Pivot.x
@@ -150,40 +130,23 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3898398306468829114}
-    - targetCorrespondingSourceObject: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3771370499513855633}
+      addedObject: {fileID: -8580873477472866897}
   m_SourcePrefab: {fileID: 100100000, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
---- !u!1 &8208687313482183246 stripped
+--- !u!1 &3955020540072817076 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
-  m_PrefabInstance: {fileID: 2333204132493357208}
+  m_PrefabInstance: {fileID: 7451530417020662626}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3898398306468829114
+--- !u!114 &-8580873477472866897
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8208687313482183246}
+  m_GameObject: {fileID: 3955020540072817076}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dfc4151da6e1266418c7756f8ff77e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userIsTarget: 0
---- !u!114 &3771370499513855633
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8208687313482183246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b14a0bd8494f7f47a3c0685a10807af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   userIsTarget: 1
-  rotateCounterClockwise: 1
