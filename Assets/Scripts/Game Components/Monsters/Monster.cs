@@ -20,6 +20,7 @@ public class Monster {
     public int damageCounters;
     public int slowingCounters;
 
+
     public Monster(int maxHealth, Element element, Position position)
     {
         this.maxHealth = maxHealth;

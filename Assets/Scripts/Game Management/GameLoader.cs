@@ -2,6 +2,7 @@ using AYellowpaper.SerializedCollections;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Loading;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameLoader : MonoBehaviour
@@ -155,6 +156,11 @@ public class GameLoader : MonoBehaviour
                     Debug.LogError("dataToLoad.monsters[i].myPosition reached end of switch");
                     break;
             }
+
+            if(loadingForActivePlayer)
+                RotationHandler.Instance.activeUserMonsters = dataToLoad.monsters;
+            else
+                RotationHandler.Instance.opponentMonsters = dataToLoad.monsters;
         }
 
     }

@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: power
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: myType
@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: cardName
-      value: Blazing Inferno
+      value: Fiery Tackle
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: background
@@ -26,11 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 75bf3de4036e801408ccbea2b709c485, type: 3}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: initiative
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
-      propertyPath: description
-      value: Also Damages user, damage is calculated seperatly
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: discardable
@@ -42,16 +38,12 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 0cc43c3364c429541822dbca32b51f4c, type: 3}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: behaivors.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: behaivors.Array.data[0]
       value: 
       objectReference: {fileID: 3898398306468829114}
-    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
-      propertyPath: behaivors.Array.data[1]
-      value: 
-      objectReference: {fileID: 1829269257312767328}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: behaivors.Array.data[2]
       value: 
@@ -62,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: -4538799922893951146, guid: a89b7baa7c9855f41af93654f2a5e564, type: 3}
     - target: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: m_Name
-      value: f_balzingInferno
+      value: f_fieryTackle
       objectReference: {fileID: 0}
     - target: {fileID: 9153766418903248155, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: m_Pivot.x
@@ -151,9 +143,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3898398306468829114}
-    - targetCorrespondingSourceObject: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1829269257312767328}
   m_SourcePrefab: {fileID: 100100000, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
 --- !u!1 &8208687313482183246 stripped
 GameObject:
@@ -173,16 +162,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   userIsTarget: 0
---- !u!114 &1829269257312767328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8208687313482183246}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfc4151da6e1266418c7756f8ff77e83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  userIsTarget: 1
