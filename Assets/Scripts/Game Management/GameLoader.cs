@@ -7,22 +7,38 @@ using UnityEngine;
 
 public class GameLoader : MonoBehaviour
 {
-    public static string gameIDToLoad = "";
+    // Singleton
+    private static GameLoader instance;
+    public static GameLoader Instance { get => GetInstance(); private set => instance = value; }
 
+    public static string gameIDToLoad = "";
     // Development purpose
     string debugGame = "da10a7cb-c405-4d71-8163-0d60eb277217";
     bool usingDebug = true;
 
-    public GameDataRepresentor playerRepresentor;
+    // Visual Representation
+    public GameDataRepresentor activePlayerRepresentor;
     public GameDataRepresentor opponentRepresentor;
-
     public GameObject monsterDisplayPrefab;
 
+    // Card key to card translation
     [SerializedDictionary("ID, Card")]
     public SerializedDictionary<short, Card> cardDictionary;
 
+    // Player data
+    public List<GameMove> activePlayerMoves = new();
+    public List<GameMove> opponentMoves = new();
+
+
     private void Awake()
     {
+        #region Singleton
+        if (instance == null || instance == this)
+            instance = this;
+        else
+            Destroy(this.gameObject);
+        #endregion
+
         Debug.Log("should load: " + gameIDToLoad);
         Debug.Log("devgame id: " + debugGame);
         Invoke(nameof(FetchGame), 1);
@@ -100,7 +116,7 @@ public class GameLoader : MonoBehaviour
             opponentData = swapStore;
         }
 
-        LoadPlayerData(activePlayerData, playerRepresentor, true);
+        LoadPlayerData(activePlayerData, activePlayerRepresentor, true);
         LoadPlayerData(opponentData, opponentRepresentor, false);
     }
 
@@ -157,11 +173,27 @@ public class GameLoader : MonoBehaviour
                     break;
             }
 
-            if(loadingForActivePlayer)
+            if (loadingForActivePlayer)
+            {
                 RotationHandler.Instance.activeUserMonsters = dataToLoad.monsters;
+                activePlayerMoves = dataToLoad.moves;
+
+            }
             else
+            {
                 RotationHandler.Instance.opponentMonsters = dataToLoad.monsters;
+                opponentMoves = dataToLoad.moves;
+            }
         }
 
+    }
+
+    private static GameLoader GetInstance()
+    {
+        if(instance != null)
+            return instance;
+
+        instance = new GameObject("GameLoader Manager").AddComponent<GameLoader>();
+        return instance;
     }
 }

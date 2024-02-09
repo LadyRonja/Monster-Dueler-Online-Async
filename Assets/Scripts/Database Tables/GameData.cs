@@ -14,8 +14,5 @@ public class GameData
     public List<CardKey> deck = new();
     public List<CardKey> discard = new();
 
-    public List<int> diceResults = new();
-    public int movesPlayed = 0;
-    public CardKey playedCard;
-    public CardKey discardedCard;
+    public List<GameMove> moves = new();
 }

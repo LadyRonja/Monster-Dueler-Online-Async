@@ -21,6 +21,10 @@ PrefabInstance:
       value: Rotates your team clockwise
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
+      propertyPath: discardable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: illustration
       value: 
       objectReference: {fileID: 21300000, guid: 0cc43c3364c429541822dbca32b51f4c, type: 3}

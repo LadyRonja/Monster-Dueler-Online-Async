@@ -9,8 +9,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
+      propertyPath: power
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: cardName
-      value: Damnation of Passivity
+      value: Toxic Tactics
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: background
@@ -18,15 +22,16 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 35cbdaeae707c9b48a8adc42995cb147, type: 3}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: initiative
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: description
-      value: 'Apply 1 Slowing Counter to all non-active enemy monsters.
+      value: 'Apply 2 Damage Counters to opponents Active Monster
 
 
-        Apply
-        1 Damaging Counter to ALL non-active monsters.'
+        If Opponent
+        Used "Rotate Clockwise" or "Rotate Counter Clockwise", instead apply 2 Damage
+        Counters to opponents non-active monster.'
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: discardable
@@ -43,10 +48,10 @@ PrefabInstance:
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: behaivors.Array.data[0]
       value: 
-      objectReference: {fileID: 6114753243627579376}
+      objectReference: {fileID: 3523672035988854340}
     - target: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: m_Name
-      value: s_damnationOfPassivity
+      value: s_toxicTactics
       objectReference: {fileID: 0}
     - target: {fileID: 9153766418903248155, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: m_Pivot.x
@@ -134,14 +139,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6114753243627579376}
+      addedObject: {fileID: 3523672035988854340}
   m_SourcePrefab: {fileID: 100100000, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
 --- !u!1 &3955020540072817076 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
   m_PrefabInstance: {fileID: 7451530417020662626}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6114753243627579376
+--- !u!114 &3523672035988854340
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,7 +155,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3955020540072817076}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 945b6a4ad45d989459208b3c1f68e308, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e5b3501cd0e0a948b17059eded125df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userIsTarget: 1
+  userIsTarget: 0

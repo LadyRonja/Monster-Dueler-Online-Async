@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &7451530417020662626
+--- !u!1001 &2333204132493357208
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -9,24 +9,32 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
+      propertyPath: power
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
+      propertyPath: myType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: cardName
-      value: Damnation of Passivity
+      value: Burn Weakness
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: background
       value: 
-      objectReference: {fileID: 21300000, guid: 35cbdaeae707c9b48a8adc42995cb147, type: 3}
+      objectReference: {fileID: 21300000, guid: 75bf3de4036e801408ccbea2b709c485, type: 3}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: initiative
-      value: 1
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: description
-      value: 'Apply 1 Slowing Counter to all non-active enemy monsters.
+      value: 'Remova all Counters from your team.
 
 
-        Apply
-        1 Damaging Counter to ALL non-active monsters.'
+        Power becomes the amount
+        of counters removed.'
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: discardable
@@ -43,10 +51,14 @@ PrefabInstance:
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: behaivors.Array.data[0]
       value: 
-      objectReference: {fileID: 6114753243627579376}
+      objectReference: {fileID: 7573676402347637675}
+    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
+      propertyPath: behaivors.Array.data[3]
+      value: 
+      objectReference: {fileID: -4538799922893951146, guid: a89b7baa7c9855f41af93654f2a5e564, type: 3}
     - target: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: m_Name
-      value: s_damnationOfPassivity
+      value: f_burnWeakness
       objectReference: {fileID: 0}
     - target: {fileID: 9153766418903248155, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: m_Pivot.x
@@ -134,23 +146,23 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6114753243627579376}
+      addedObject: {fileID: 7573676402347637675}
   m_SourcePrefab: {fileID: 100100000, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
---- !u!1 &3955020540072817076 stripped
+--- !u!1 &8208687313482183246 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5875554109744022230, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
-  m_PrefabInstance: {fileID: 7451530417020662626}
+  m_PrefabInstance: {fileID: 2333204132493357208}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6114753243627579376
+--- !u!114 &7573676402347637675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3955020540072817076}
+  m_GameObject: {fileID: 8208687313482183246}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 945b6a4ad45d989459208b3c1f68e308, type: 3}
+  m_Script: {fileID: 11500000, guid: a042ca1e53ec6cf4c856d3c3e133e6d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  userIsTarget: 1
+  userIsTarget: 0

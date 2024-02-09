@@ -29,6 +29,10 @@ PrefabInstance:
       value: Heals user for 5 HP
       objectReference: {fileID: 0}
     - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
+      propertyPath: discardable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7642488347428015322, guid: 337d1bf4c50e34842b2d3349658acbad, type: 3}
       propertyPath: illustration
       value: 
       objectReference: {fileID: 21300000, guid: 0cc43c3364c429541822dbca32b51f4c, type: 3}
