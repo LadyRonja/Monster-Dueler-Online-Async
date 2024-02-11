@@ -7,6 +7,7 @@ public class Game
 {
     public string gameID = Guid.NewGuid().ToString();
     public int openSlots = 2;
+    public int turnsPlayed = 0;
     public bool gameIsOver = false;
 
     public List<User> players;
@@ -18,5 +19,6 @@ public class Game
         this.openSlots = openSlots;
         this.players = players;
         this.gameDatas = gameDatas;
+        this.turnsPlayed = 0;
     }
 }

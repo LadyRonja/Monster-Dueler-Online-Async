@@ -1,9 +1,11 @@
 using AYellowpaper.SerializedCollections;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Loading;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameLoader : MonoBehaviour
 {
@@ -13,17 +15,18 @@ public class GameLoader : MonoBehaviour
 
     public static string gameIDToLoad = "";
     // Development purpose
-    string debugGame = "da10a7cb-c405-4d71-8163-0d60eb277217";
+    string debugGame = "e8e74f62-9097-41b4-a08e-b87b67af2e68";
     bool usingDebug = true;
 
     // Visual Representation
     public GameDataRepresentor activePlayerRepresentor;
     public GameDataRepresentor opponentRepresentor;
     public GameObject monsterDisplayPrefab;
+    public GameObject moveButtonPrefab;
 
     // Card key to card translation
     [SerializedDictionary("ID, Card")]
-    public SerializedDictionary<short, Card> cardDictionary;
+    public SerializedDictionary<int, GameObject> cardPrefabDictionary;
 
     // Player data
     public List<GameMove> activePlayerMoves = new();
@@ -127,7 +130,23 @@ public class GameLoader : MonoBehaviour
 
         // Load options in hand here
         if(loadingForActivePlayer)
-        {   }
+        {
+            // Clear old hand items
+            foreach (Transform child in dataRepresentor.handContainer)
+            {
+                Destroy(child.gameObject);
+            }
+
+            // Add fixed rotate cards
+            AddCardToHandContainer(0, dataRepresentor.handContainer);
+            AddCardToHandContainer(1, dataRepresentor.handContainer);
+
+            // Add variable cards
+            for (int i = 0; i < dataToLoad.hand.Count; i++)
+            {
+                AddCardToHandContainer(dataToLoad.hand[i].id, dataRepresentor.handContainer);
+            }
+        }
 
         // Load Cards in discard
 
@@ -185,7 +204,20 @@ public class GameLoader : MonoBehaviour
                 opponentMoves = dataToLoad.moves;
             }
         }
+    }
 
+    private void AddCardToHandContainer(int dictionaryIndex, Transform handContainer)
+    {
+        GameObject rotateCardObj1 = Instantiate(moveButtonPrefab, handContainer);
+        Card cardToLoad = cardPrefabDictionary[dictionaryIndex].GetComponent<Card>();
+
+        Color colorToSet = Color.grey;
+        if (cardToLoad.myType == Element.Fire) colorToSet = Color.red;
+        else if(cardToLoad.myType == Element.Grass) colorToSet = Color.green;
+        else if (cardToLoad.myType == Element.Water) colorToSet = Color.blue;
+
+        rotateCardObj1.GetComponent<Image>().color = colorToSet;
+        rotateCardObj1.GetComponentInChildren<TMP_Text>().text = cardToLoad.cardName;
     }
 
     private static GameLoader GetInstance()

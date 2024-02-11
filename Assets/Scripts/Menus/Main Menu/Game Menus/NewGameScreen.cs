@@ -45,35 +45,38 @@ public class NewGameScreen : MonoBehaviour
         };
 
         // TODO: Shuffle deck and deal hand
-        List<CardKey> deck = new() {
-            new CardKey(),
-            new CardKey()};
+        List<CardKey> activeUserDeck = SetUpDeck();
+        List<CardKey> activeUserHand = new();
+        activeUserHand.Add(activeUserDeck[0]);
+        activeUserHand.Add(activeUserDeck[1]);
+        activeUserHand.Add(activeUserDeck[2]);
+        activeUserHand.Add(activeUserDeck[3]);
+        activeUserDeck.RemoveRange(0, 3);
 
-        deck[0].id = 0;
-        deck[1].id = 1;
-
-        List<CardKey> hand = new() {
-            new CardKey(),
-            new CardKey()};
-
-        hand[0].id = 2;
-        hand[1].id = 3;
-
-        GameData gameData1 = new GameData();
-        gameData1.deck = deck;
-        gameData1.hand = hand;
-        gameData1.monsters = monsters;
-
-        GameData gameData2 = new GameData();
-        gameData2.deck = deck;
-        gameData2.hand = hand;
-        gameData2.monsters = monsters;
+        List<CardKey> opponentDeck = SetUpDeck();
+        List<CardKey> opponentHand = new();
+        opponentHand.Add(opponentDeck[0]);
+        opponentHand.Add(opponentDeck[1]);
+        opponentHand.Add(opponentDeck[2]);
+        opponentHand.Add(opponentDeck[3]);
+        opponentDeck.RemoveRange(0, 3);
 
 
-        gameData1.dataOwner = ActiveUser.CurrentActiveUser.username;
-        gameData2.dataOwner = otherPlayer.username;
+        GameData activeUserGameData = new GameData();
+        activeUserGameData.deck = activeUserDeck;
+        activeUserGameData.hand = activeUserHand;
+        activeUserGameData.monsters = monsters;
 
-        List<GameData> gameDatas = new() { gameData1, gameData2 };
+        GameData opponentGameData = new GameData();
+        opponentGameData.deck = opponentDeck;
+        opponentGameData.hand = opponentHand;
+        opponentGameData.monsters = monsters;
+
+
+        activeUserGameData.dataOwner = ActiveUser.CurrentActiveUser.username;
+        opponentGameData.dataOwner = otherPlayer.username;
+
+        List<GameData> gameDatas = new() { activeUserGameData, opponentGameData };
 
         Game newGame = new Game(0, players, gameDatas);
         newGame.gameDatas[0].forGame = newGame.gameID;
@@ -87,5 +90,27 @@ public class NewGameScreen : MonoBehaviour
         FirebaseSaver.SaveToDatabase(DBPaths.GAMES_TABLE, newGame.gameID, jsonGameBlob);
 
         SceneHandler.LoadGame(newGame.gameID);
+    }
+
+    private List<CardKey> SetUpDeck()
+    {
+        List<CardKey> output = new();
+
+        for (short i = 2; i < 16; i++)
+        {
+            CardKey newCard = new CardKey();
+            newCard.id = i;
+            output.Add(newCard);
+        }
+
+        for (int i = 0; i < output.Count; i++)
+        {
+            int rand = Random.Range(0, output.Count);
+            CardKey temp = output[i];
+            output[i] = output[rand];
+            output[rand] = temp;
+        }
+
+        return output;
     }
 }
