@@ -29,6 +29,8 @@ public class GameLoader : MonoBehaviour
     public SerializedDictionary<int, GameObject> cardPrefabDictionary;
 
     // Player data
+    public GameData activePlayerData;
+    public GameData opponentPlayerData;
     public List<GameMove> activePlayerMoves = new();
     public List<GameMove> opponentMoves = new();
 
@@ -123,7 +125,7 @@ public class GameLoader : MonoBehaviour
         LoadPlayerData(opponentData, opponentRepresentor, false);
     }
 
-    private void LoadPlayerData(GameData dataToLoad, GameDataRepresentor dataRepresentor, bool loadingForActivePlayer)
+    public void LoadPlayerData(GameData dataToLoad, GameDataRepresentor dataRepresentor, bool loadingForActivePlayer)
     {
         // Load username
         dataRepresentor.usernameText.text = dataToLoad.dataOwner;
@@ -138,8 +140,8 @@ public class GameLoader : MonoBehaviour
             }
 
             // Add fixed rotate cards
-            AddCardToHandContainer(0, dataRepresentor.handContainer);
-            AddCardToHandContainer(1, dataRepresentor.handContainer);
+            AddCardToHandContainer(100, dataRepresentor.handContainer);
+            AddCardToHandContainer(101, dataRepresentor.handContainer);
 
             // Add variable cards
             for (int i = 0; i < dataToLoad.hand.Count; i++)
@@ -196,28 +198,32 @@ public class GameLoader : MonoBehaviour
             {
                 RotationHandler.Instance.activeUserMonsters = dataToLoad.monsters;
                 activePlayerMoves = dataToLoad.moves;
+                activePlayerData = dataToLoad;
 
             }
             else
             {
                 RotationHandler.Instance.opponentMonsters = dataToLoad.monsters;
                 opponentMoves = dataToLoad.moves;
+                opponentPlayerData = dataToLoad;
             }
         }
     }
 
     private void AddCardToHandContainer(int dictionaryIndex, Transform handContainer)
     {
-        GameObject rotateCardObj1 = Instantiate(moveButtonPrefab, handContainer);
+        GameObject cardObj = Instantiate(moveButtonPrefab, handContainer);
         Card cardToLoad = cardPrefabDictionary[dictionaryIndex].GetComponent<Card>();
+        cardToLoad.assignedID = dictionaryIndex;
 
         Color colorToSet = Color.grey;
         if (cardToLoad.myType == Element.Fire) colorToSet = Color.red;
         else if(cardToLoad.myType == Element.Grass) colorToSet = Color.green;
         else if (cardToLoad.myType == Element.Water) colorToSet = Color.blue;
 
-        rotateCardObj1.GetComponent<Image>().color = colorToSet;
-        rotateCardObj1.GetComponentInChildren<TMP_Text>().text = cardToLoad.cardName;
+        cardObj.GetComponent<Image>().color = colorToSet;
+        cardObj.GetComponentInChildren<TMP_Text>().text = cardToLoad.cardName;
+        cardObj.GetComponent<Button>().onClick.AddListener(delegate () { cardToLoad.SetUpdisplay(MoveManager.Instance.cardDisplayer); }) ;
     }
 
     private static GameLoader GetInstance()

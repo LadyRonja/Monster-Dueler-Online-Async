@@ -3,6 +3,6 @@ using System;
 [Serializable]
 public class GameMove
 {
-    public CardKey playedCard;
-    public CardKey discardedCard;
+    public CardKey playedCard = null;
+    public CardKey discardedCard = null;
 }

@@ -16,6 +16,21 @@ public class Card : MonoBehaviour
     public bool discardable;
     public List<CardBehaivor> behaivors;
 
+    public int assignedID = 0;
+
+    public void SetUpdisplay(DisplayCard display)
+    {
+        display.gameObject.SetActive(true);
+        display.nameText.text = cardName;
+        display.descriptionText.text = description;
+        display.powerText.text = power.ToString();
+        display.initiativeText.text = initiative.ToString();
+        display.background.sprite = background;
+        display.illustration.sprite = illustration;
+
+        MoveManager.Instance.SetUpConfirmButton(this);
+    }
+
     public virtual void ExecuteCard(Monster user, Monster target)
     {
         Debug.Log($"Casting card {cardName}");
