@@ -11,7 +11,41 @@ public class NewGameScreen : MonoBehaviour
 
     public async void TEMP()
     {
-        await AttemptToCreateNewGame();
+        //await AttemptToCreateNewGame();
+        AtemptCreateRPSGame();
+    }
+
+    public async Task AtemptCreateRPSGame()
+    {
+        Debug.Log("starting, searching for user: " + otherUserInputField.text);
+
+        if (otherUserInputField.text == ActiveUser.CurrentActiveUser.username || otherUserInputField.text == string.Empty)
+        {
+            // TODO: Tell the user they cant play vs themselves
+            Debug.Log("You can not play the game vs yourself");
+            return;
+        }
+
+        User otherPlayer = await FirebaseLoader.GetUserFromUserNamer(otherUserInputField.text);
+
+        if (otherPlayer == null)
+        {
+            // TODO: Display error to user
+            Debug.Log("No user with that username was found");
+            return;
+        }
+
+        List<User> players = new() {
+            ActiveUser.CurrentActiveUser,
+            otherPlayer};
+
+        RPSGame newGame = new RPSGame(0, players);
+
+        string jsonGameBlob = JsonUtility.ToJson(newGame);
+
+        FirebaseSaver.SaveToDatabase(DBPaths.RPS_TABLE, newGame.gameID, jsonGameBlob);
+
+        SceneHandler.LoadRPSGame(newGame.gameID);
     }
 
     public async Task AttemptToCreateNewGame()

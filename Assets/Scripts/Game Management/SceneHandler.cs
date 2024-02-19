@@ -16,4 +16,10 @@ public class SceneHandler
     {
         SceneManager.LoadScene(sceneName);
     }
+
+    public static void LoadRPSGame(string gameID)
+    {
+        RPSLoader.rpsGameToLoad = gameID;
+        LoadSceneMode("RPSGameScene");
+    }
 }

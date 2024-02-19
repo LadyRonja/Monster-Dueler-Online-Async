@@ -73,12 +73,14 @@ public class FirebaseLoader
         return output;
     }
 
-    public static async Task<List<Game>> GetGamesWithUser(User withUser)
+    public static async Task<List<Game>> GetGamesWithUser(User withUser, bool rpsGame = false)
     {
         List<Game> output = new();
         var db = FirebaseInitializer.db;
-        //string withUseuserBlob = JsonUtility.ToJson(withUser);
-        await db.RootReference.Child(DBPaths.GAMES_TABLE).OrderByChild("playerA").EqualTo(withUser.username).GetValueAsync().ContinueWithOnMainThread(task =>
+
+        string tableToLoad = DBPaths.GAMES_TABLE;
+        if(rpsGame) tableToLoad = DBPaths.RPS_TABLE;
+        await db.RootReference.Child(tableToLoad).OrderByChild("playerA").EqualTo(withUser.username).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.Exception != null)
             {
@@ -97,7 +99,7 @@ public class FirebaseLoader
             }
         });
 
-        await db.RootReference.Child(DBPaths.GAMES_TABLE).OrderByChild("playerB").EqualTo(withUser.username).GetValueAsync().ContinueWithOnMainThread(task =>
+        await db.RootReference.Child(tableToLoad).OrderByChild("playerB").EqualTo(withUser.username).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.Exception != null)
             {

@@ -19,10 +19,10 @@ public class ContinueGameScreen : MonoBehaviour
 
     private async void LoadButtonsForGameContinues()
     {
-        Debug.Log("Loading active games");
+        Debug.Log("Loading active RPS games");
 
         // Should only fetch games the active user is in to start with
-        List<Game> gamesWithUser = await FirebaseLoader.GetGamesWithUser(ActiveUser.CurrentActiveUser);
+        List<Game> gamesWithUser = await FirebaseLoader.GetGamesWithUser(ActiveUser.CurrentActiveUser, true);
 
         foreach (Game g in gamesWithUser)
         {
@@ -34,7 +34,7 @@ public class ContinueGameScreen : MonoBehaviour
             else
                 otherUserName = g.playerB;
             continueBtn.GetComponentInChildren<TMP_Text>().text = otherUserName;
-            continueBtn.onClick.AddListener(delegate () { SceneHandler.LoadGame(g.gameID); });
+            continueBtn.onClick.AddListener(delegate () { SceneHandler.LoadRPSGame(g.gameID); });
         }
     }
 
