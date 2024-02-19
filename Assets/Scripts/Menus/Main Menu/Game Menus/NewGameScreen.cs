@@ -63,13 +63,13 @@ public class NewGameScreen : MonoBehaviour
 
 
         GameData activeUserGameData = new GameData();
-        activeUserGameData.deck = activeUserDeck;
-        activeUserGameData.hand = activeUserHand;
+        activeUserGameData.startDeck = activeUserDeck;
+        activeUserGameData.startHand = activeUserHand;
         activeUserGameData.monsters = monsters;
 
         GameData opponentGameData = new GameData();
-        opponentGameData.deck = opponentDeck;
-        opponentGameData.hand = opponentHand;
+        opponentGameData.startDeck = opponentDeck;
+        opponentGameData.startHand = opponentHand;
         opponentGameData.monsters = monsters;
 
 

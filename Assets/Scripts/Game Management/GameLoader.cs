@@ -15,8 +15,8 @@ public class GameLoader : MonoBehaviour
 
     public static string gameIDToLoad = "";
     // Development purpose
-    string debugGame = "e8e74f62-9097-41b4-a08e-b87b67af2e68";
-    bool usingDebug = true;
+    [HideInInspector] public string debugGame = "d228ea88-ef7d-4cd4-8597-33add654dddf";
+    [HideInInspector] public bool usingDebug = false;
 
     // Visual Representation
     public GameDataRepresentor activePlayerRepresentor;
@@ -84,6 +84,7 @@ public class GameLoader : MonoBehaviour
         // TODO:
         // Validate game state here
 
+        gameToLoad = MoveManager.Instance.ExecuteMoves(gameToLoad);
         LoadGame(gameToLoad);
     }
 
@@ -95,20 +96,6 @@ public class GameLoader : MonoBehaviour
             Debug.Log("Loading game with current information: " + debugGame);
         else
             Debug.Log("Loading game with current information: " + gameIDToLoad);
-
-
-        Debug.Log($"Player A: {gameToLoad.players[0].username}");
-        Debug.Log($"Player B: {gameToLoad.players[1].username}");
-
-        Debug.Log($"Player A monster healths: " +
-            $"{gameToLoad.gameDatas[0].monsters[0].curHealth} / {gameToLoad.gameDatas[0].monsters[0].maxHealth}, " +
-            $"{gameToLoad.gameDatas[0].monsters[1].curHealth} / {gameToLoad.gameDatas[0].monsters[1].maxHealth}, " +
-            $"{gameToLoad.gameDatas[0].monsters[2].curHealth} / {gameToLoad.gameDatas[0].monsters[2].maxHealth} ");
-
-        Debug.Log($"Player B monster healths: " +
-            $"{gameToLoad.gameDatas[1].monsters[0].curHealth} / {gameToLoad.gameDatas[1].monsters[0].maxHealth}, " +
-            $"{gameToLoad.gameDatas[1].monsters[1].curHealth} / {gameToLoad.gameDatas[1].monsters[1].maxHealth}, " +
-            $"{gameToLoad.gameDatas[1].monsters[2].curHealth} / {gameToLoad.gameDatas[1].monsters[2].maxHealth} ");
 
         GameData activePlayerData = gameToLoad.gameDatas[0];
         GameData opponentData = gameToLoad.gameDatas[1];
@@ -144,22 +131,35 @@ public class GameLoader : MonoBehaviour
             AddCardToHandContainer(101, dataRepresentor.handContainer);
 
             // Add variable cards
-            for (int i = 0; i < dataToLoad.hand.Count; i++)
+            List<CardKey> handToLoad;
+            if (dataToLoad.moves.Count > 0)
+                handToLoad = dataToLoad.moves[^1].hand;
+            else
+                handToLoad = dataToLoad.startHand;
+
+            for (int i = 0; i < handToLoad.Count; i++)
             {
-                AddCardToHandContainer(dataToLoad.hand[i].id, dataRepresentor.handContainer);
+                AddCardToHandContainer(handToLoad[i].id, dataRepresentor.handContainer);
             }
         }
 
         // Load Cards in discard
 
         // Load Monsters
-        for (int i = 0; i < dataToLoad.monsters.Count; i++)
+
+        List<Monster> monstersToLoad;
+        if (dataToLoad.moves.Count > 0)
+            monstersToLoad = dataToLoad.moves[^1].monstersState;
+        else
+            monstersToLoad = dataToLoad.monsters;
+
+        for (int i = 0; i < monstersToLoad.Count; i++)
         {
             GameObject monsterDisplayObj = Instantiate(monsterDisplayPrefab, dataRepresentor.monsterContainerFront);
             MonsterDisplay monsterDisplayScr = monsterDisplayObj.GetComponent<MonsterDisplay>();
 
-            monsterDisplayScr.healthText.text = $"HP: {dataToLoad.monsters[i].curHealth} / {dataToLoad.monsters[i].maxHealth}";
-            switch (dataToLoad.monsters[i].myElement)   
+            monsterDisplayScr.healthText.text = $"HP: {monstersToLoad[i].curHealth} / {monstersToLoad[i].maxHealth}";
+            switch (monstersToLoad[i].myElement)   
             {
                 case Element.Fire:
                     monsterDisplayScr.background.color = Color.red;
@@ -175,7 +175,7 @@ public class GameLoader : MonoBehaviour
                     break;
             }
 
-            switch (dataToLoad.monsters[i].myPosition)
+            switch (monstersToLoad[i].myPosition)
             {
                 case Position.Front:
                     monsterDisplayObj.transform.parent = dataRepresentor.monsterContainerFront;
@@ -196,14 +196,14 @@ public class GameLoader : MonoBehaviour
 
             if (loadingForActivePlayer)
             {
-                RotationHandler.Instance.activeUserMonsters = dataToLoad.monsters;
+                RotationHandler.Instance.activeUserMonsters = monstersToLoad;
                 activePlayerMoves = dataToLoad.moves;
                 activePlayerData = dataToLoad;
 
             }
             else
             {
-                RotationHandler.Instance.opponentMonsters = dataToLoad.monsters;
+                RotationHandler.Instance.opponentMonsters = monstersToLoad;
                 opponentMoves = dataToLoad.moves;
                 opponentPlayerData = dataToLoad;
             }

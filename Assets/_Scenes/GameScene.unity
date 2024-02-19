@@ -1883,6 +1883,9 @@ MonoBehaviour:
       id: 0
     discardedCard:
       id: 0
+    discard: []
+    hand: []
+    deck: []
   currentMoveState: 0
 --- !u!1 &518787659
 GameObject:
@@ -3375,8 +3378,8 @@ MonoBehaviour:
     dataOwner: 
     forGame: 
     monsters: []
-    hand: []
-    deck: []
+    startHand: []
+    startDeck: []
     discard: []
     moves: []
   opponentPlayerData:
@@ -3384,8 +3387,8 @@ MonoBehaviour:
     dataOwner: 
     forGame: 
     monsters: []
-    hand: []
-    deck: []
+    startHand: []
+    startDeck: []
     discard: []
     moves: []
   activePlayerMoves: []
@@ -4028,7 +4031,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1480913490
 RectTransform:
   m_ObjectHideFlags: 0

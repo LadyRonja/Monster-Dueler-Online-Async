@@ -73,6 +73,51 @@ public class FirebaseLoader
         return output;
     }
 
+    public static async Task<List<Game>> GetGamesWithUser(User withUser)
+    {
+        List<Game> output = new();
+        var db = FirebaseInitializer.db;
+        //string withUseuserBlob = JsonUtility.ToJson(withUser);
+        await db.RootReference.Child(DBPaths.GAMES_TABLE).OrderByChild("playerA").EqualTo(withUser.username).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.Exception != null)
+            {
+                Debug.LogError(task.Exception);
+            }
+            //here we get the result from our database.
+            DataSnapshot snap = task.Result;
+
+            if (snap.ChildrenCount > 0)
+            {
+                foreach (var item in snap.Children)
+                {
+                    string json = item.GetRawJsonValue();
+                    output.Add(JsonUtility.FromJson<Game>(json));
+                }
+            }
+        });
+
+        await db.RootReference.Child(DBPaths.GAMES_TABLE).OrderByChild("playerB").EqualTo(withUser.username).GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.Exception != null)
+            {
+                Debug.LogError(task.Exception);
+            }
+            //here we get the result from our database.
+            DataSnapshot snap = task.Result;
+
+            if (snap.ChildrenCount > 0)
+            {
+                foreach (var item in snap.Children)
+                {
+                    string json = item.GetRawJsonValue();
+                    output.Add(JsonUtility.FromJson<Game>(json));
+                }
+            }
+        });
+        return output;
+    }
+
     public static async Task<string> LoadTable(string tableName)
     {
         string output = "";
