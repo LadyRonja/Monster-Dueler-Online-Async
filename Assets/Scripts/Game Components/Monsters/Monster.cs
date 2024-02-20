@@ -1,7 +1,5 @@
 
 using System;
-using System.Diagnostics;
-using UnityEditor.Experimental.GraphView;
 
 public enum Element { Fire, Water, Grass, Special}
 public enum Position { Front, BackRight, BackLeft}

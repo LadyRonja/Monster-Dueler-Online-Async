@@ -36,6 +36,7 @@ public class RPSManager : MonoBehaviour
     private void Start()
     {
         DetermineMoveState();
+        RPSLoader.Instance.OnGameLoaded += DetermineMoveState;
     }
 
     public void DetermineMoveState()
@@ -46,7 +47,8 @@ public class RPSManager : MonoBehaviour
             DisableButtons();
             return;
         }
-        else if (currentMove == null)
+        
+        if (currentMove == null)
         {
             currentMove = new RPSMove();
         }
@@ -93,6 +95,8 @@ public class RPSManager : MonoBehaviour
         string gameUploadBlob = JsonUtility.ToJson(activeGame);
 
         FirebaseSaver.SaveToDatabase(DBPaths.RPS_TABLE, gameToUploadTo, gameUploadBlob);
+        RPSLoader.Instance.FetchGame();
+        currentMove = null;
         DetermineMoveState();
         Debug.Log("Uploaded");
     }
@@ -109,6 +113,11 @@ public class RPSManager : MonoBehaviour
         rockButton.interactable = true;
         paperButton.interactable = true;
         scissorButton.interactable = true;
+    }
+
+    private void OnDestroy()
+    {
+        RPSLoader.Instance.OnGameLoaded -= DetermineMoveState;
     }
 
     private static RPSManager GetInstance()

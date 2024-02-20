@@ -1,4 +1,5 @@
 using AYellowpaper.SerializedCollections;
+using Firebase.Database;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -225,6 +226,7 @@ public class GameLoader : MonoBehaviour
         cardObj.GetComponentInChildren<TMP_Text>().text = cardToLoad.cardName;
         cardObj.GetComponent<Button>().onClick.AddListener(delegate () { cardToLoad.SetUpdisplay(MoveManager.Instance.cardDisplayer); }) ;
     }
+
 
     private static GameLoader GetInstance()
     {

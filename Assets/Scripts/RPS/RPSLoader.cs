@@ -1,3 +1,4 @@
+using Firebase.Database;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -27,6 +28,10 @@ public class RPSLoader : MonoBehaviour
     public List<RPSMove> activePlayerMoves;
     public List<RPSMove> opponentMoves;
 
+    public delegate void LoadedGame();
+    public LoadedGame OnStateUpdated;
+    public LoadedGame OnGameLoaded;
+
     private void Awake()
     {
         #region Singleton
@@ -44,9 +49,33 @@ public class RPSLoader : MonoBehaviour
             Destroy(child.gameObject);
 
         Invoke(nameof(FetchGame), 1);
+        Invoke(nameof(Subscribe), 1);
+    }
+    private void Subscribe()
+    {
+        string idToTack = rpsGameToLoad;
+        if (usingDebug) idToTack = debugGame;
+
+        FirebaseInitializer.db.GetReference($"{DBPaths.RPS_TABLE}/{idToTack}").ValueChanged += HandleValueChange;
     }
 
-    private async void FetchGame()
+    private void HandleValueChange(object sender, ValueChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            //Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+
+        // Do something with the data in args.Snapshot
+        Debug.Log("Value has changed: " + args.Snapshot.GetRawJsonValue());
+
+        //run the game with the new information
+        FetchGame();
+    }
+
+
+    public async void FetchGame()
     {
         if (rpsGameToLoad == "" && !usingDebug)
         {
@@ -84,6 +113,13 @@ public class RPSLoader : MonoBehaviour
     private void LoadGame(RPSGame gameToLoad)
     {
         Debug.Log($"Signed in player: {ActiveUser.CurrentActiveUser.username}");
+
+
+        foreach (Transform child in activePlayerEntryParent)
+            Destroy(child.gameObject);
+        foreach (Transform child in opponentPlayerEntryParent)
+            Destroy(child.gameObject);
+
 
         if (usingDebug)
             Debug.Log("Loading game with current information: " + debugGame);
@@ -187,15 +223,37 @@ public class RPSLoader : MonoBehaviour
             }
         }
 
+        if(activePlayerMoves.Count == opponentMoves.Count+1) 
+        {
+            GameObject aMove = Instantiate(moveEntryPrefab, activePlayerEntryParent);
+            TMP_Text aText = aMove.GetComponentInChildren<TMP_Text>();
+            aText.text = ((RPS)activePlayerMoves[^1].selectedMove).ToString();
+        }
+
         winsText.color = Color.green;
         winsText.text = $"Wins: {wins}";
 
-        tiesText.color = Color.green;
+        tiesText.color = Color.yellow;
         tiesText.text = $"Ties: {ties}";
 
         lossesText.color = Color.red;
         lossesText.text = $"Losses: {losses}";
 
+        OnGameLoaded?.Invoke();
+        //RPSManager.Instance.DetermineMoveState();
+    }
+
+    private void OnDisable()
+    {
+        OnDestroy();
+    }
+
+    private void OnDestroy()
+    {
+        string idToTack = rpsGameToLoad;
+        if (usingDebug) idToTack = debugGame;
+
+        FirebaseInitializer.db.GetReference($"{DBPaths.RPS_TABLE}/{idToTack}").ValueChanged -= HandleValueChange;
     }
 
     private static RPSLoader GetInstance()
