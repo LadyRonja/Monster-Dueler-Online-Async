@@ -16,6 +16,7 @@ public class StartupManager : MonoBehaviour
 
     private void PerformFirstStart()
     {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
         firstStart = false;
     }
 

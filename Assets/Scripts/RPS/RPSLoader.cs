@@ -286,14 +286,18 @@ public class RPSLoader : MonoBehaviour
         {
             case ActivePlayerWinState.WON:
                 victoryText.text = "YOU WON!";
+                gameToComplete.winnner = ActiveUser.CurrentActiveUser.username;
                 victoryText.color = Color.green;
                 break;
             case ActivePlayerWinState.TIED:
                 victoryText.text = "TIE";
+                gameToComplete.winnner = "";
                 victoryText.color = Color.yellow;
                 break;
             case ActivePlayerWinState.LOST:
                 victoryText.text = "YOU LOST!";
+                if (ActiveUser.CurrentActiveUser.username.Equals(gameToComplete.playerA)) gameToComplete.winnner = gameToComplete.playerB;
+                else gameToComplete.winnner = gameToComplete.playerA;
                 victoryText.color = Color.red;
                 break;
         }

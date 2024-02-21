@@ -2829,7 +2829,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugGame: a9366c61-aede-435d-861b-0827afb69b73
-  usingDebug: 1
+  usingDebug: 0
   moveEntryPrefab: {fileID: 3843478931939960552, guid: b9b86fbd85bd9db4989d52e110b7b50d, type: 3}
   activePlayerEntryParent: {fileID: 82983636}
   opponentPlayerEntryParent: {fileID: 694613176}
@@ -2843,6 +2843,7 @@ MonoBehaviour:
     gameID: 
     openSlots: 0
     gameIsOver: 0
+    winnner: 
     gameDoneAt: 0
     playerA: 
     playerB: 

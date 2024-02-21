@@ -7,6 +7,7 @@ public class RPSGame
     public string gameID = Guid.NewGuid().ToString();
     public int openSlots = 2;
     public bool gameIsOver = false;
+    public string winnner = "";
     public long gameDoneAt = 0;
 
     public string playerA;

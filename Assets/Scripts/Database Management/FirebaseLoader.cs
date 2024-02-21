@@ -73,9 +73,9 @@ public class FirebaseLoader
         return output;
     }
 
-    public static async Task<List<Game>> GetGamesWithUser(User withUser, bool rpsGame = false)
+    public static async Task<List<RPSGame>> GetGamesWithUser(User withUser, bool rpsGame = false)
     {
-        List<Game> output = new();
+        List<RPSGame> output = new();
         var db = FirebaseInitializer.db;
 
         string tableToLoad = DBPaths.GAMES_TABLE;
@@ -94,7 +94,7 @@ public class FirebaseLoader
                 foreach (var item in snap.Children)
                 {
                     string json = item.GetRawJsonValue();
-                    output.Add(JsonUtility.FromJson<Game>(json));
+                    output.Add(JsonUtility.FromJson<RPSGame>(json));
                 }
             }
         });
@@ -113,7 +113,7 @@ public class FirebaseLoader
                 foreach (var item in snap.Children)
                 {
                     string json = item.GetRawJsonValue();
-                    output.Add(JsonUtility.FromJson<Game>(json));
+                    output.Add(JsonUtility.FromJson<RPSGame>(json));
                 }
             }
         });
