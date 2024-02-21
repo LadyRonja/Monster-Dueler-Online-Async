@@ -27,6 +27,7 @@ public class RPSManager : MonoBehaviour
             rockButton.onClick.AddListener(delegate { SelectMove(RPS.ROCK); });
             paperButton.onClick.AddListener(delegate { SelectMove(RPS.PAPER); });
             scissorButton.onClick.AddListener(delegate { SelectMove(RPS.SCISSOR); });
+            DisableButtons();
         }
         else
             Destroy(this.gameObject);
@@ -35,12 +36,29 @@ public class RPSManager : MonoBehaviour
 
     private void Start()
     {
-        DetermineMoveState();
         RPSLoader.Instance.OnGameLoaded += DetermineMoveState;
     }
 
     public void DetermineMoveState()
     {
+        if(RPSLoader.Instance.loadedGame == null)
+        {
+            DisableButtons();
+            return;
+        }
+
+        if(RPSLoader.Instance.activePlayerMoves == null)
+        {
+            DisableButtons();
+            return;
+        }
+
+        if (RPSLoader.Instance.loadedGame.gameIsOver)
+        {
+            DisableButtons();
+            return;
+        }
+
         if (RPSLoader.Instance.activePlayerMoves.Count > RPSLoader.Instance.opponentMoves.Count)
         {
             currentMoveState = RPSState.Awaiting_Opponent;
@@ -110,6 +128,7 @@ public class RPSManager : MonoBehaviour
 
     private void EnableButtons()
     {
+        Debug.Log("I have been called!");
         rockButton.interactable = true;
         paperButton.interactable = true;
         scissorButton.interactable = true;

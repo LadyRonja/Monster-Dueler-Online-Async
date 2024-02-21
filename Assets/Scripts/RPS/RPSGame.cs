@@ -6,8 +6,8 @@ public class RPSGame
 {
     public string gameID = Guid.NewGuid().ToString();
     public int openSlots = 2;
-    public int turnsPlayed = 0;
     public bool gameIsOver = false;
+    public long gameDoneAt = 0;
 
     public string playerA;
     public string playerB;
@@ -20,6 +20,5 @@ public class RPSGame
         this.openSlots = openSlots;
         this.playerA = players[0].username;
         this.playerB = players[1].username;
-        this.turnsPlayed = 0;
     }
 }

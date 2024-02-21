@@ -38,6 +38,8 @@ public static class Login
 
         if (result.success && firstLogin)
             await LogIn(true);
+        else if (result.success)
+            await LogIn();
 
         return result;
     }

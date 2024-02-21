@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class ApplicationCloser : MonoBehaviour
@@ -15,5 +16,10 @@ public class ApplicationCloser : MonoBehaviour
 
             Application.Quit();
         }
+    }
+
+    public void ReturnToMainScene()
+    {
+        SceneHandler.LoadSceneMode("MainMenu");
     }
 }

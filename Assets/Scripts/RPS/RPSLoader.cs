@@ -1,4 +1,5 @@
 using Firebase.Database;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,18 +11,24 @@ public class RPSLoader : MonoBehaviour
     private static RPSLoader instance;
     public static RPSLoader Instance { get => GetInstance(); private set => instance = value; }
 
-    public static string rpsGameToLoad = "";    
+    public static string rpsGameToLoad = "";
+    public const int MAX_MOVES = 10;
     // Development purpose
-    [HideInInspector] public string debugGame = "d228ea88-ef7d-4cd4-8597-33add654dddf";
-    [HideInInspector] public bool usingDebug = false;
-
+    public string debugGame = "339fd4bf-c9be-4468-ab2c-304f41516327";
+    public bool usingDebug = true;
+    [Space(20)]
     [SerializeField] GameObject moveEntryPrefab;
     [SerializeField] Transform activePlayerEntryParent;
     [SerializeField] Transform opponentPlayerEntryParent;
     [Space]
+    [SerializeField] TMP_Text activePlayerNameText;
+    [SerializeField] TMP_Text opponentNameText;
+    [Space]
     [SerializeField] TMP_Text winsText;
     [SerializeField] TMP_Text tiesText;
     [SerializeField] TMP_Text lossesText;
+    [Space]
+    [SerializeField] TMP_Text victoryText;
 
     [HideInInspector]
     public RPSGame loadedGame;
@@ -114,7 +121,6 @@ public class RPSLoader : MonoBehaviour
     {
         Debug.Log($"Signed in player: {ActiveUser.CurrentActiveUser.username}");
 
-
         foreach (Transform child in activePlayerEntryParent)
             Destroy(child.gameObject);
         foreach (Transform child in opponentPlayerEntryParent)
@@ -126,6 +132,8 @@ public class RPSLoader : MonoBehaviour
         else
             Debug.Log("Loading game with current information: " + rpsGameToLoad);
 
+
+
         int movesToLoad = Mathf.Min(gameToLoad.playerAMoves.Count, gameToLoad.playerBMoves.Count);
         
         activePlayerMoves = new();
@@ -135,11 +143,15 @@ public class RPSLoader : MonoBehaviour
         {
             activePlayerMoves = gameToLoad.playerAMoves;
             opponentMoves = gameToLoad.playerBMoves;
+            activePlayerNameText.text = gameToLoad.playerA;
+            opponentNameText.text = gameToLoad.playerB;
         }
         else
         {
             activePlayerMoves = gameToLoad.playerBMoves;
             opponentMoves = gameToLoad.playerAMoves;
+            activePlayerNameText.text = gameToLoad.playerB;
+            opponentNameText.text = gameToLoad.playerA;
         }
 
         int wins = 0;
@@ -237,10 +249,56 @@ public class RPSLoader : MonoBehaviour
         tiesText.text = $"Ties: {ties}";
 
         lossesText.color = Color.red;
-        lossesText.text = $"Losses: {losses}";
+        lossesText.text = $"Lost: {losses}";
+
+        loadedGame = gameToLoad;
+
+        if (IsGameOver(movesToLoad))
+        {
+            ActivePlayerWinState winState = ActivePlayerWinState.TIED;
+            if (wins > losses) winState = ActivePlayerWinState.WON;
+            else if (wins < losses) winState = ActivePlayerWinState.LOST;
+            CompleteGame(gameToLoad, winState);
+        }
 
         OnGameLoaded?.Invoke();
-        //RPSManager.Instance.DetermineMoveState();
+        
+    }
+
+    private bool IsGameOver(int movesToLoad)
+    {
+        if (movesToLoad >= MAX_MOVES)
+            return true;
+        else 
+            return false;
+    }
+
+    enum ActivePlayerWinState { WON, TIED, LOST}
+    private void CompleteGame(RPSGame gameToComplete, ActivePlayerWinState activePlayerWon)
+    {
+        gameToComplete.gameIsOver = true;
+        if(gameToComplete.gameDoneAt == 0) gameToComplete.gameDoneAt = DateTime.Now.Ticks;
+        string gameBlob = JsonUtility.ToJson(gameToComplete);
+        FirebaseSaver.SaveToDatabase(DBPaths.RPS_TABLE, gameToComplete.gameID, gameBlob);
+        loadedGame = gameToComplete;
+
+        switch (activePlayerWon)
+        {
+            case ActivePlayerWinState.WON:
+                victoryText.text = "YOU WON!";
+                victoryText.color = Color.green;
+                break;
+            case ActivePlayerWinState.TIED:
+                victoryText.text = "TIE";
+                victoryText.color = Color.yellow;
+                break;
+            case ActivePlayerWinState.LOST:
+                victoryText.text = "YOU LOST!";
+                victoryText.color = Color.red;
+                break;
+        }
+
+        victoryText.gameObject.SetActive(true);
     }
 
     private void OnDisable()

@@ -16,8 +16,8 @@ public class GameLoader : MonoBehaviour
 
     public static string gameIDToLoad = "";
     // Development purpose
-    [HideInInspector] public string debugGame = "d228ea88-ef7d-4cd4-8597-33add654dddf";
-    [HideInInspector] public bool usingDebug = false;
+    [HideInInspector] public string debugGame = "d0aa3501-526f-45c3-b035-35582c8f20b6";
+    [HideInInspector] public bool usingDebug = true;
 
     // Visual Representation
     public GameDataRepresentor activePlayerRepresentor;
@@ -52,6 +52,8 @@ public class GameLoader : MonoBehaviour
 
     private async void FetchGame()
     {
+        usingDebug = true;
+        debugGame = "d0aa3501-526f-45c3-b035-35582c8f20b6";
         if (gameIDToLoad == "" && !usingDebug)
         {
             Debug.LogError("No game to load");
