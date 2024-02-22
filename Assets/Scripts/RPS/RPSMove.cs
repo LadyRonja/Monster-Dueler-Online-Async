@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum RPS { UNSELECTED, ROCK, PAPER, SCISSOR}
+public enum RPS { UNSELECTED, SOLDIER, POLITICIAN, ASSASSIN, COUNTER_SPELL, FIREBALL}
 
 [Serializable]
 public class RPSMove

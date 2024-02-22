@@ -11,9 +11,12 @@ public class RPSManager : MonoBehaviour
     private static RPSManager instance;
     public static RPSManager Instance { get => GetInstance(); private set => instance = value; }
 
-    [SerializeField] Button rockButton;
-    [SerializeField] Button paperButton;
-    [SerializeField] Button scissorButton;
+    [SerializeField] Button soldierButton;
+    [SerializeField] Button politicianButton;
+    [SerializeField] Button assassinButton;
+    [SerializeField] Button fireballButton;
+    [SerializeField] Button counterSpellButton;
+    List<MoveButton> moveButtons = new();
 
     public RPSMove currentMove;
     public RPSState currentMoveState = RPSState.Awaiting_Play;
@@ -24,9 +27,20 @@ public class RPSManager : MonoBehaviour
         if (instance == null || instance == this)
         {
             instance = this;
-            rockButton.onClick.AddListener(delegate { SelectMove(RPS.ROCK); });
-            paperButton.onClick.AddListener(delegate { SelectMove(RPS.PAPER); });
-            scissorButton.onClick.AddListener(delegate { SelectMove(RPS.SCISSOR); });
+            soldierButton.onClick.AddListener(delegate { SelectMove(RPS.SOLDIER); });
+            politicianButton.onClick.AddListener(delegate { SelectMove(RPS.POLITICIAN); });
+            assassinButton.onClick.AddListener(delegate { SelectMove(RPS.ASSASSIN); });
+            fireballButton.onClick.AddListener(delegate { SelectMove(RPS.FIREBALL); });
+            counterSpellButton.onClick.AddListener(delegate { SelectMove(RPS.COUNTER_SPELL); });
+            moveButtons = new()
+            {
+                soldierButton.GetComponent<MoveButton>(),
+                politicianButton.GetComponent<MoveButton>(),
+                assassinButton.GetComponent<MoveButton>(),
+                fireballButton.GetComponent<MoveButton>(),
+                counterSpellButton.GetComponent<MoveButton>()
+            };
+
             DisableButtons();
         }
         else
@@ -121,17 +135,18 @@ public class RPSManager : MonoBehaviour
 
     private void DisableButtons()
     {
-        rockButton.interactable = false;
-        paperButton.interactable = false;
-        scissorButton.interactable = false;
+        foreach (MoveButton mb in moveButtons)
+        {
+            mb.DisableButton();
+        }
     }
 
     private void EnableButtons()
     {
-        Debug.Log("I have been called!");
-        rockButton.interactable = true;
-        paperButton.interactable = true;
-        scissorButton.interactable = true;
+        foreach (MoveButton mb in moveButtons)
+        {
+            mb.EnableButton();
+        }
     }
 
     private void OnDestroy()

@@ -39,6 +39,9 @@ public class RPSLoader : MonoBehaviour
     public LoadedGame OnStateUpdated;
     public LoadedGame OnGameLoaded;
 
+    enum MoveResult {UNDETERMINED, WON, TIED, LOST }
+    List<(RPS myMove, List<RPS> opponentsMove, MoveResult result)> rules = new();
+
     private void Awake()
     {
         #region Singleton
@@ -55,8 +58,81 @@ public class RPSLoader : MonoBehaviour
         foreach (Transform child in opponentPlayerEntryParent)
             Destroy(child.gameObject);
 
+        CreateRules();
+
         Invoke(nameof(FetchGame), 1);
         Invoke(nameof(Subscribe), 1);
+    }
+
+    private void CreateRules()
+    {
+        rules = new();
+
+        // Soldier
+        rules.Add((RPS.SOLDIER,
+                    new() {
+                        RPS.POLITICIAN, 
+                        RPS.FIREBALL},
+                            MoveResult.LOST));
+
+        rules.Add((RPS.SOLDIER,
+            new() {
+                        RPS.ASSASSIN,
+                        RPS.COUNTER_SPELL},
+                    MoveResult.WON));
+
+        // Assassin
+        rules.Add((RPS.ASSASSIN,
+            new() {
+                        RPS.SOLDIER,
+                        RPS.FIREBALL},
+                    MoveResult.LOST));
+
+        rules.Add((RPS.ASSASSIN,
+            new() {
+                        RPS.POLITICIAN,
+                        RPS.COUNTER_SPELL},
+                    MoveResult.WON));
+
+        // Politician
+        rules.Add((RPS.POLITICIAN,
+            new() {
+                        RPS.ASSASSIN,
+                        RPS.FIREBALL},
+                    MoveResult.LOST));
+
+        rules.Add((RPS.POLITICIAN,
+            new() {
+                        RPS.SOLDIER,
+                        RPS.COUNTER_SPELL},
+                    MoveResult.WON));
+
+        // Fireball
+        rules.Add((RPS.FIREBALL,
+            new() {
+                        RPS.ASSASSIN,
+                        RPS.POLITICIAN,
+                        RPS.SOLDIER},
+                    MoveResult.WON));
+
+        rules.Add((RPS.FIREBALL,
+            new() {
+                        RPS.COUNTER_SPELL},
+                    MoveResult.LOST));
+
+        // Counter Spell
+        rules.Add((RPS.COUNTER_SPELL,
+            new() {
+                        RPS.FIREBALL},
+                    MoveResult.WON));
+
+        rules.Add((RPS.COUNTER_SPELL,
+            new() {
+                        RPS.ASSASSIN,
+                        RPS.POLITICIAN,
+                        RPS.SOLDIER},
+                    MoveResult.LOST));
+
     }
     private void Subscribe()
     {
@@ -167,75 +243,42 @@ public class RPSLoader : MonoBehaviour
             TMP_Text oText = oMove.GetComponentInChildren<TMP_Text>();
             oText.text = ((RPS)opponentMoves[i].selectedMove).ToString();
 
-            switch (activePlayerMoves[i].selectedMove)
+            MoveResult result = MoveResult.UNDETERMINED;
+
+            foreach (var rule in rules)
             {
-                case RPS.UNSELECTED:
-                    Debug.LogError("Please contact IT, this shouldn't be allowed");
+                if (activePlayerMoves[i].selectedMove != rule.myMove)
+                    continue;
+
+                if (rule.opponentsMove.Contains(opponentMoves[i].selectedMove))
+                {
+                    result = rule.result; 
                     break;
-                case RPS.ROCK:
-                    switch (opponentMoves[i].selectedMove)
-                    {
-                        case RPS.ROCK:
-                            ties++;
-                            aText.color = Color.yellow;
-                            oText.color = Color.yellow;
-                            break;
-                        case RPS.PAPER:
-                            losses++;
-                            aText.color = Color.red;
-                            oText.color = Color.green;
-                            break;
-                        case RPS.SCISSOR:
-                            wins++;
-                            aText.color = Color.green;
-                            oText.color = Color.red;
-                            break;
-                    }
+                }
+            }
+
+            switch (result)
+            {
+                case MoveResult.WON:
+                    wins++;
+                    aText.color = Color.green;
+                    oText.color = Color.red;
                     break;
-                case RPS.PAPER:
-                    switch (opponentMoves[i].selectedMove)
-                    {
-                        case RPS.ROCK:
-                            wins++;
-                            aText.color = Color.green;
-                            oText.color = Color.red;
-                            break;
-                        case RPS.PAPER:
-                            ties++;
-                            aText.color = Color.yellow;
-                            oText.color = Color.yellow;
-                            break;
-                        case RPS.SCISSOR:
-                            losses++;
-                            aText.color = Color.red;
-                            oText.color = Color.green;
-                            break;
-                    }
+                case MoveResult.LOST:
+                    losses++;
+                    aText.color = Color.red;
+                    oText.color = Color.green;
                     break;
-                case RPS.SCISSOR:
-                    switch (opponentMoves[i].selectedMove)
-                    {
-                        case RPS.ROCK:
-                            losses++;
-                            aText.color = Color.red;
-                            oText.color = Color.green;
-                            break;
-                        case RPS.PAPER:
-                            wins++;
-                            aText.color = Color.green;
-                            oText.color = Color.red;
-                            break;
-                        case RPS.SCISSOR:
-                            ties++;
-                            aText.color = Color.yellow;
-                            oText.color = Color.yellow;
-                            break;
-                    }
+                case MoveResult.UNDETERMINED:
+                case MoveResult.TIED:
+                    ties++;
+                    aText.color = Color.yellow;
+                    oText.color = Color.yellow;
                     break;
             }
         }
 
-        if(activePlayerMoves.Count == opponentMoves.Count+1) 
+        if (activePlayerMoves.Count == opponentMoves.Count+1) 
         {
             GameObject aMove = Instantiate(moveEntryPrefab, activePlayerEntryParent);
             TMP_Text aText = aMove.GetComponentInChildren<TMP_Text>();
@@ -255,14 +298,14 @@ public class RPSLoader : MonoBehaviour
 
         if (IsGameOver(movesToLoad))
         {
-            ActivePlayerWinState winState = ActivePlayerWinState.TIED;
-            if (wins > losses) winState = ActivePlayerWinState.WON;
-            else if (wins < losses) winState = ActivePlayerWinState.LOST;
+            MoveResult winState = MoveResult.TIED;
+            if (wins > losses) winState = MoveResult.WON;
+            else if (wins < losses) winState = MoveResult.LOST;
             CompleteGame(gameToLoad, winState);
         }
 
         OnGameLoaded?.Invoke();
-        
+
     }
 
     private bool IsGameOver(int movesToLoad)
@@ -273,8 +316,7 @@ public class RPSLoader : MonoBehaviour
             return false;
     }
 
-    enum ActivePlayerWinState { WON, TIED, LOST}
-    private void CompleteGame(RPSGame gameToComplete, ActivePlayerWinState activePlayerWon)
+    private void CompleteGame(RPSGame gameToComplete, MoveResult activePlayerWon)
     {
         gameToComplete.gameIsOver = true;
         if(gameToComplete.gameDoneAt == 0) gameToComplete.gameDoneAt = DateTime.Now.Ticks;
@@ -284,17 +326,17 @@ public class RPSLoader : MonoBehaviour
 
         switch (activePlayerWon)
         {
-            case ActivePlayerWinState.WON:
+            case MoveResult.WON:
                 victoryText.text = "YOU WON!";
                 gameToComplete.winnner = ActiveUser.CurrentActiveUser.username;
                 victoryText.color = Color.green;
                 break;
-            case ActivePlayerWinState.TIED:
+            case MoveResult.TIED:
                 victoryText.text = "TIE";
                 gameToComplete.winnner = "";
                 victoryText.color = Color.yellow;
                 break;
-            case ActivePlayerWinState.LOST:
+            case MoveResult.LOST:
                 victoryText.text = "YOU LOST!";
                 if (ActiveUser.CurrentActiveUser.username.Equals(gameToComplete.playerA)) gameToComplete.winnner = gameToComplete.playerB;
                 else gameToComplete.winnner = gameToComplete.playerA;
