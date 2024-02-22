@@ -12,6 +12,7 @@ public class MainMenuScreen : MonoBehaviour
     public GameObject newGameScreen;
     public GameObject continueGameScreen;
     public TMP_Text greetingText;
+    public GameObject tutorial;
 
     private void Awake()
     {
@@ -23,7 +24,7 @@ public class MainMenuScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        greetingText.text = $"Welcome {ActiveUser.CurrentActiveUser.username}!";
+        greetingText.text = $"Welcome {ActiveUser.CurrentActiveUser.username}";
         SetScreenActive(mainMenuScreen);
     }
 
@@ -47,6 +48,11 @@ public class MainMenuScreen : MonoBehaviour
         playScreen.SetActive(false);
         newGameScreen.SetActive(false);
         continueGameScreen.SetActive(false);
+
+        if(screenToActivate == continueGameScreen)
+            tutorial.SetActive(false);
+        else
+            tutorial.SetActive(true);
 
         screenToActivate.SetActive(true);
     }
