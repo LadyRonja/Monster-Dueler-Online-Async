@@ -1,9 +1,11 @@
+using AYellowpaper.SerializedCollections;
 using Firebase.Database;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RPSLoader : MonoBehaviour
 {
@@ -18,6 +20,8 @@ public class RPSLoader : MonoBehaviour
     public bool usingDebug = true;
     [Space(20)]
     [SerializeField] GameObject moveEntryPrefab;
+    [SerializedDictionary("ID, Card")]
+    public SerializedDictionary<RPS, Sprite> moveToSpriteDictionary;
     [SerializeField] Transform activePlayerEntryParent;
     [SerializeField] Transform opponentPlayerEntryParent;
     [Space]
@@ -209,9 +213,7 @@ public class RPSLoader : MonoBehaviour
             Debug.Log("Loading game with current information: " + rpsGameToLoad);
 
 
-
-        int movesToLoad = Mathf.Min(gameToLoad.playerAMoves.Count, gameToLoad.playerBMoves.Count);
-        
+        int movesToLoad = Mathf.Min(gameToLoad.playerAMoves.Count, gameToLoad.playerBMoves.Count); 
         activePlayerMoves = new();
         opponentMoves = new();
 
@@ -236,12 +238,16 @@ public class RPSLoader : MonoBehaviour
         for (int i = 0; i < movesToLoad; i++)
         {
             GameObject aMove = Instantiate(moveEntryPrefab, activePlayerEntryParent);
-            TMP_Text aText = aMove.GetComponentInChildren<TMP_Text>();
-            aText.text = ((RPS)activePlayerMoves[i].selectedMove).ToString(); 
+            Image aImage = aMove.GetComponentInChildren<Image>();
+            aImage.sprite = moveToSpriteDictionary[activePlayerMoves[i].selectedMove];
+            if (activePlayerMoves[i].selectedMove != RPS.FIREBALL && activePlayerMoves[i].selectedMove != RPS.COUNTER_SPELL)
+                aImage.color = Color.black;
 
             GameObject oMove = Instantiate(moveEntryPrefab, opponentPlayerEntryParent);
-            TMP_Text oText = oMove.GetComponentInChildren<TMP_Text>();
-            oText.text = ((RPS)opponentMoves[i].selectedMove).ToString();
+            Image oImage = oMove.GetComponentInChildren<Image>();
+            oImage.sprite = moveToSpriteDictionary[opponentMoves[i].selectedMove];
+            if (opponentMoves[i].selectedMove != RPS.FIREBALL && opponentMoves[i].selectedMove != RPS.COUNTER_SPELL)
+                oImage.color = Color.black;
 
             MoveResult result = MoveResult.UNDETERMINED;
 
@@ -261,19 +267,19 @@ public class RPSLoader : MonoBehaviour
             {
                 case MoveResult.WON:
                     wins++;
-                    aText.color = Color.green;
-                    oText.color = Color.red;
+                    aMove.GetComponentsInChildren<Image>()[1].color = Color.green;
+                    oMove.GetComponentsInChildren<Image>()[1].color = Color.red;
                     break;
                 case MoveResult.LOST:
                     losses++;
-                    aText.color = Color.red;
-                    oText.color = Color.green;
+                    aMove.GetComponentsInChildren<Image>()[1].color = Color.red;
+                    oMove.GetComponentsInChildren<Image>()[1].color = Color.green;
                     break;
                 case MoveResult.UNDETERMINED:
                 case MoveResult.TIED:
                     ties++;
-                    aText.color = Color.yellow;
-                    oText.color = Color.yellow;
+                    aMove.GetComponentsInChildren<Image>()[1].color = Color.yellow;
+                    oMove.GetComponentsInChildren<Image>()[1].color = Color.yellow;
                     break;
             }
         }
@@ -281,8 +287,10 @@ public class RPSLoader : MonoBehaviour
         if (activePlayerMoves.Count == opponentMoves.Count+1) 
         {
             GameObject aMove = Instantiate(moveEntryPrefab, activePlayerEntryParent);
-            TMP_Text aText = aMove.GetComponentInChildren<TMP_Text>();
-            aText.text = ((RPS)activePlayerMoves[^1].selectedMove).ToString();
+            Image aImage = aMove.GetComponentInChildren<Image>();
+            aImage.sprite = moveToSpriteDictionary[activePlayerMoves[^1].selectedMove];
+            if (activePlayerMoves[^1].selectedMove != RPS.FIREBALL || activePlayerMoves[^1].selectedMove != RPS.COUNTER_SPELL)
+                aImage.color = Color.black;
         }
 
         winsText.color = Color.green;
