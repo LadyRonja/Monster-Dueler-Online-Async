@@ -289,7 +289,7 @@ public class RPSLoader : MonoBehaviour
             GameObject aMove = Instantiate(moveEntryPrefab, activePlayerEntryParent);
             Image aImage = aMove.GetComponentInChildren<Image>();
             aImage.sprite = moveToSpriteDictionary[activePlayerMoves[^1].selectedMove];
-            if (activePlayerMoves[^1].selectedMove != RPS.FIREBALL || activePlayerMoves[^1].selectedMove != RPS.COUNTER_SPELL)
+            if (activePlayerMoves[^1].selectedMove != RPS.FIREBALL && activePlayerMoves[^1].selectedMove != RPS.COUNTER_SPELL)
                 aImage.color = Color.black;
         }
 
