@@ -18,6 +18,11 @@ public class StartupManager : MonoBehaviour
     {
         Screen.orientation = ScreenOrientation.LandscapeLeft;
         firstStart = false;
+        string lastSignIn = PlayerPrefs.GetString("lastMail");
+        if(lastSignIn != null && lastSignIn != "")
+        {
+            LoginScreen.Instance.emailInputField.text = lastSignIn;
+        }
     }
 
     private void PerformContinuedStarts()

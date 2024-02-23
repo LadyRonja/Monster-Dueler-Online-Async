@@ -48,6 +48,7 @@ public static class Login
     {
         string loadedUserJson = await FirebaseLoader.LoadFromDatabase(DBPaths.USER_TABLE, FirebaseInitializer.auth.CurrentUser.UserId);
         User loadedUser = JsonUtility.FromJson<User>(loadedUserJson);
+        PlayerPrefs.SetString("lastMail", loadedUser.email);
 
         if(firstLogin)
             FirebaseSaver.SaveValueToDatabase(DBPaths.USERNAMES_TABLE, Guid.NewGuid().ToString(), loadedUser.username);
